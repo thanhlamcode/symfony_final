@@ -48,6 +48,9 @@ RUN composer dump-autoload --optimize
 # Change current user to www-data
 USER www-data
 
-# Expose port 9000 and start php-fpm server
-EXPOSE 9000
+# Create PHP-FPM configuration
+RUN echo "listen = 0.0.0.0:${PORT:-9000}" > /usr/local/etc/php-fpm.d/zz-docker.conf
+
+# Expose port and start php-fpm server
+EXPOSE ${PORT:-9000}
 CMD ["php-fpm"] 

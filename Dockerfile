@@ -19,13 +19,19 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd xml
 
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy existing application directory
+# Copy composer files first
+COPY composer.json composer.lock ./
+
+# Install dependencies
+RUN composer install --no-scripts --no-autoloader
+
+# Copy the rest of the application
 COPY . .
 
 # Configure git
@@ -36,8 +42,8 @@ RUN mkdir -p /var/www/var/cache /var/www/var/log \
     && chown -R www-data:www-data /var/www \
     && chmod -R 777 /var/www/var
 
-# Install dependencies
-RUN composer install --no-interaction --no-dev --optimize-autoloader
+# Generate autoloader
+RUN composer dump-autoload --optimize
 
 # Change current user to www-data
 USER www-data

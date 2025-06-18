@@ -45,12 +45,14 @@ RUN mkdir -p /var/www/var/cache /var/www/var/log \
 # Generate autoloader
 RUN composer dump-autoload --optimize
 
+# Create startup script
+RUN echo '#!/bin/sh\n\
+echo "listen = 0.0.0.0:${PORT:-9000}" > /usr/local/etc/php-fpm.d/zz-docker.conf\n\
+php-fpm' > /usr/local/bin/start.sh \
+    && chmod +x /usr/local/bin/start.sh
+
 # Change current user to www-data
 USER www-data
-
-# Create startup script
-COPY docker/php/start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
 
 # Expose port and start php-fpm server
 EXPOSE 9000

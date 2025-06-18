@@ -16,18 +16,6 @@ services:
     networks:
       - symfony_network
 
-  nginx:
-    image: nginx:alpine
-    container_name: symfony_nginx
-    restart: unless-stopped
-    ports:
-      - "${PORT:-8080}:80"
-    volumes:
-      - ./:/var/www
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d
-    networks:
-      - symfony_network
-
   database:
     image: postgres:${POSTGRES_VERSION:-16}-alpine
     container_name: symfony_db
@@ -38,7 +26,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
       POSTGRES_USER: ${POSTGRES_USER:-app}
     ports:
-      - "5432:5432"
+      - "5432"
     volumes:
       - database_data:/var/lib/postgresql/data:rw
     networks:

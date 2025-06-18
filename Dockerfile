@@ -11,49 +11,55 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libpq-dev \
     nodejs \
-    npm
+    npm \
+    nginx
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd xml
+RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy composer files first
+# Copy composer files
 COPY composer.json composer.lock ./
 
 # Install dependencies
 RUN composer install --no-scripts --no-autoloader
 
-# Copy the rest of the application
+# Copy source code
 COPY . .
 
-# Configure git
+# Configure Git
 RUN git config --global --add safe.directory /var/www
 
 # Create necessary directories and set permissions
-RUN mkdir -p /var/www/var/cache /var/www/var/log \
-    && chown -R www-data:www-data /var/www \
-    && chmod -R 777 /var/www/var
+RUN mkdir -p var/cache var/log \
+    && chown -R www-data:www-data var/cache var/log \
+    && chmod -R 777 var/cache var/log
 
-# Generate autoloader
+# Generate optimized autoloader
 RUN composer dump-autoload --optimize
 
-# Create startup script
+# Configure Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Create start script
 RUN echo '#!/bin/sh' > /usr/local/bin/start.sh
-RUN echo 'echo "listen = 0.0.0.0:10000" > /usr/local/etc/php-fpm.d/zz-docker.conf' >> /usr/local/bin/start.sh
-RUN echo 'php-fpm' >> /usr/local/bin/start.sh
+RUN echo 'php-fpm -D' >> /usr/local/bin/start.sh
+RUN echo 'nginx -g "daemon off;"' >> /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
-# Change current user to www-data
+# Switch to non-root user
 USER www-data
 
-# Expose port and start php-fpm server
+# Expose port
 EXPOSE 10000
+
+# Start Nginx and PHP-FPM
 CMD ["/usr/local/bin/start.sh"] 

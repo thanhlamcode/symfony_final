@@ -47,7 +47,7 @@ RUN composer dump-autoload --optimize
 
 # Create startup script
 RUN echo '#!/bin/sh' > /usr/local/bin/start.sh
-RUN echo 'echo "listen = 0.0.0.0:${PORT:-9000}" > /usr/local/etc/php-fpm.d/zz-docker.conf' >> /usr/local/bin/start.sh
+RUN echo 'echo "listen = 0.0.0.0:10000" > /usr/local/etc/php-fpm.d/zz-docker.conf' >> /usr/local/bin/start.sh
 RUN echo 'php-fpm' >> /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
@@ -55,5 +55,5 @@ RUN chmod +x /usr/local/bin/start.sh
 USER www-data
 
 # Expose port and start php-fpm server
-EXPOSE 9000
+EXPOSE 10000
 CMD ["/usr/local/bin/start.sh"] 

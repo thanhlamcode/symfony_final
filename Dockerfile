@@ -49,6 +49,11 @@ RUN composer dump-autoload --optimize
 # Configure Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 
+# Create Nginx cache directories and set permissions
+RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi \
+    && chown -R www-data:www-data /var/lib/nginx \
+    && chmod -R 755 /var/lib/nginx
+
 # Create start script
 RUN echo '#!/bin/sh' > /usr/local/bin/start.sh
 RUN echo 'php-fpm -D' >> /usr/local/bin/start.sh

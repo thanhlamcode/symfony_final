@@ -46,10 +46,10 @@ RUN mkdir -p /var/www/var/cache /var/www/var/log \
 RUN composer dump-autoload --optimize
 
 # Create startup script
-RUN echo '#!/bin/sh\n\
-echo "listen = 0.0.0.0:${PORT:-9000}" > /usr/local/etc/php-fpm.d/zz-docker.conf\n\
-php-fpm' > /usr/local/bin/start.sh \
-    && chmod +x /usr/local/bin/start.sh
+RUN echo '#!/bin/sh' > /usr/local/bin/start.sh
+RUN echo 'echo "listen = 0.0.0.0:${PORT:-9000}" > /usr/local/etc/php-fpm.d/zz-docker.conf' >> /usr/local/bin/start.sh
+RUN echo 'php-fpm' >> /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 # Change current user to www-data
 USER www-data

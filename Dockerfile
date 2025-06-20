@@ -47,13 +47,16 @@ RUN rm -f /etc/nginx/conf.d/default.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # --- KẾT THÚC PHẦN SỬA ---
 
-# Change ownership
+# Change ownership of our applications
 RUN chown -R www-data:www-data /var/www
+
 # Đảm bảo các thư mục cache, log có quyền ghi (quan trọng cho Symfony)
 RUN mkdir -p /var/www/var/cache /var/www/var/log && chmod -R 775 /var/www/var
 
-# Install Composer dependencies as www-data user
+# Chuyển sang user www-data
 USER www-data
+
+# Install Composer dependencies as www-data user
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 # Chuyển về user root

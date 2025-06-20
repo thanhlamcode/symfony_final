@@ -1,0 +1,49 @@
+# render.yaml
+services:
+  # 1. Dịch vụ Web Server (Nginx) - Đây là dịch vụ công khai
+  - type: web
+    name: symfony-nginx  # Tên dịch vụ trên Render
+    runtime: docker
+    dockerfilePath: ./Dockerfile.nginx # Sẽ tạo file Dockerfile riêng cho Nginx
+    # Render sẽ tự động gán cổng HTTP/HTTPS công khai
+    # và ta sẽ cấu hình Nginx để lắng nghe trên cổng 10000
+    envVars:
+      - key: PORT
+        value: 10000
+    healthCheck: # Kiểm tra sức khỏe
+      path: /
+    buildFilter:
+      paths:
+      - Dockerfile.nginx
+      - docker/nginx/conf.d/default.conf
+      - ./*
+
+  # 2. Dịch vụ PHP-FPM (ứng dụng Symfony) - Đây là dịch vụ riêng tư
+  - type: pserv # pserv = Private Service (Dịch vụ riêng tư)
+    name: symfony-app # Tên dịch vụ trên Render
+    runtime: docker
+    dockerfilePath: ./Dockerfile # Dùng Dockerfile gốc của bạn
+    # Dịch vụ này không cần cổng công khai, nó chỉ nói chuyện với Nginx
+    buildFilter:
+      paths:
+      - Dockerfile
+      - ./*
+
+  # 3. Dịch vụ Database
+  - type: pserv
+    name: symfony-db
+    image:
+      url: postgres:16-alpine
+    envVars:
+      - key: POSTGRES_DB
+        value: app
+      - key: POSTGRES_USER
+        value: app
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: symfony-db # Tên của chính database này
+          property: password
+    disk:
+      name: postgres-data
+      mountPath: /var/lib/postgresql/data
+      sizeGB: 1

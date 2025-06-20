@@ -17,7 +17,6 @@ RUN apt-get update && apt-get install -y \
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# === BƯỚC SỬA QUAN TRỌNG ===
 # Cấu hình PHP-FPM để lắng nghe trên cổng TCP thay vì socket.
 # File www.conf là file cấu hình mặc định của PHP-FPM pool.
 RUN sed -i 's|listen = /var/run/php-fpm.sock|listen = 9000|g' /usr/local/etc/php-fpm.d/www.conf
@@ -34,17 +33,24 @@ WORKDIR /var/www
 # Copy application source code
 COPY . .
 
+# --- PHẦN CẤU HÌNH ĐÃ SỬA ---
 # Copy Nginx and Supervisor configuration
 COPY ./docker/nginx/conf.d/render.conf /etc/nginx/sites-available/default
-RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+# SỬA LỖI "File exists": Thêm cờ "-f" (force) để ghi đè lên file cấu hình mặc định cũ
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+# Xóa thêm một file cấu hình mặc định khác cho chắc chắn
 RUN rm -f /etc/nginx/conf.d/default.conf
 
+# Copy file cấu hình của Supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# --- KẾT THÚC PHẦN SỬA ---
 
 # Change ownership
 RUN chown -R www-data:www-data /var/www
-# Đảm bảo các thư mục cache, log có quyền ghi
-RUN chmod -R 775 /var/www/var/cache /var/www/var/log
+# Đảm bảo các thư mục cache, log có quyền ghi (quan trọng cho Symfony)
+RUN chmod -R 775 /var/www/var
 
 # Install Composer dependencies as www-data user
 USER www-data

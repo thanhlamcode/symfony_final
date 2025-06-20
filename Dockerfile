@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
   zip \
   unzip \
   libpq-dev \
+  libsqlite3-dev \
   nginx \
   supervisor \
   sqlite3 # Thêm sqlite3 để hỗ trợ DATABASE_URL giả

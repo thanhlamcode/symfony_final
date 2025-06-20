@@ -32,20 +32,17 @@ WORKDIR /var/www
 # Copy existing application directory
 COPY . .
 
-# Xóa vendor và composer.lock để đảm bảo sạch
-RUN rm -rf vendor composer.lock
-
-# Install dependencies
-RUN composer install --no-interaction --no-dev --optimize-autoloader
-
-# Đảm bảo symfony-cmd có quyền thực thi
-RUN if [ -f vendor/bin/symfony-cmd ]; then chmod +x vendor/bin/symfony-cmd; fi
-
 # Change ownership of our applications
 RUN chown -R www-data:www-data /var/www
 
 # Change current user to www-data
 USER www-data
+
+# Install dependencies (chạy composer install với user www-data)
+RUN composer install --no-interaction --no-dev --optimize-autoloader
+
+# Đảm bảo symfony-cmd có quyền thực thi
+RUN if [ -f vendor/bin/symfony-cmd ]; then chmod +x vendor/bin/symfony-cmd; fi
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000

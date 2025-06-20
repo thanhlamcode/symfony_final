@@ -50,7 +50,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Change ownership
 RUN chown -R www-data:www-data /var/www
 # Đảm bảo các thư mục cache, log có quyền ghi (quan trọng cho Symfony)
-RUN chmod -R 775 /var/www/var
+RUN mkdir -p /var/www/var/cache /var/www/var/log && chmod -R 775 /var/www/var
 
 # Install Composer dependencies as www-data user
 USER www-data

@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Coupon;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -54,14 +52,10 @@ class PromotionProgram
     #[Groups(['promotion_program:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'promotionProgram', targetEntity: Coupon::class)]
-    private Collection $coupons;
-
     public function __construct()
     {
         $this->id = new UuidV7();
         $this->status = PromotionProgramStatus::ACTIVE;
-        $this->coupons = new ArrayCollection();
     }
 
     public function getId(): UuidV7
@@ -152,34 +146,4 @@ class PromotionProgram
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Coupon>
-     */
-    public function getCoupons(): Collection
-    {
-        return $this->coupons;
-    }
-
-    public function addCoupon(Coupon $coupon): static
-    {
-        if (!$this->coupons->contains($coupon)) {
-            $this->coupons->add($coupon);
-            $coupon->setPromotionProgram($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCoupon(Coupon $coupon): static
-    {
-        if ($this->coupons->removeElement($coupon)) {
-            // set the owning side to null (unless already changed)
-            if ($coupon->getPromotionProgram() === $this) {
-                $coupon->setPromotionProgram(null);
-            }
-        }
-
-        return $this;
-    }
-}
+} 

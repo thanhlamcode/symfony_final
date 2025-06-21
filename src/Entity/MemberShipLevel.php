@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -49,13 +47,9 @@ class MemberShipLevel
     #[Groups(['member_ship_level:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'memberShipLevel', targetEntity: Customer::class)]
-    private Collection $customers;
-
     public function __construct()
     {
         $this->id = new UuidV7();
-        $this->customers = new ArrayCollection();
     }
 
     public function getId(): UuidV7
@@ -134,12 +128,4 @@ class MemberShipLevel
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Customer>
-     */
-    public function getCustomers(): Collection
-    {
-        return $this->customers;
-    }
-}
+} 

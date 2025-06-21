@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -44,14 +42,10 @@ class Category
     #[Groups(['category:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
-    private Collection $products;
-
     public function __construct()
     {
         $this->id = new UuidV7();
         $this->status = CategoryStatus::ACTIVE;
-        $this->products = new ArrayCollection();
     }
 
     public function getId(): UuidV7
@@ -115,36 +109,6 @@ class Category
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): static
-    {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-            $product->setCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): static
-    {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getCategory() === $this) {
-                $product->setCategory(null);
-            }
-        }
 
         return $this;
     }

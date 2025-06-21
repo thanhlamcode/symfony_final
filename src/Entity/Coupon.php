@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -65,14 +63,9 @@ class Coupon
     #[Groups(['coupon:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(targetEntity: CouponOrder::class, mappedBy: 'coupon', cascade: ['persist', 'remove'])]
-    private Collection $couponOrders;
-
     public function __construct()
     {
         $this->id = new UuidV7();
-        $this->status = CouponStatus::ACTIVE;
-        $this->couponOrders = new ArrayCollection();
     }
 
     public function getId(): UuidV7
@@ -196,36 +189,6 @@ class Coupon
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CouponOrder>
-     */
-    public function getCouponOrders(): Collection
-    {
-        return $this->couponOrders;
-    }
-
-    public function addCouponOrder(CouponOrder $couponOrder): static
-    {
-        if (!$this->couponOrders->contains($couponOrder)) {
-            $this->couponOrders->add($couponOrder);
-            $couponOrder->setCoupon($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCouponOrder(CouponOrder $couponOrder): static
-    {
-        if ($this->couponOrders->removeElement($couponOrder)) {
-            // set the owning side to null (unless already changed)
-            if ($couponOrder->getCoupon() === $this) {
-                $couponOrder->setCoupon(null);
-            }
-        }
 
         return $this;
     }

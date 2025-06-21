@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\UuidV7;
-use App\DiscountType;
-use App\CouponStatus;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['coupon:read']],

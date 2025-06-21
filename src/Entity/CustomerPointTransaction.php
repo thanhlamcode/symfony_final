@@ -20,13 +20,13 @@ class CustomerPointTransaction
     #[Groups(['customer_point_transaction:read'])]
     private UuidV7 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'customerPointTransactions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['customer_point_transaction:read', 'customer_point_transaction:write'])]
     private ?Customer $customer = null;
 
-    #[ORM\ManyToOne(inversedBy: 'customerPointTransactions')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\ManyToOne(targetEntity: Order::class)]
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: true)]
     #[Groups(['customer_point_transaction:read', 'customer_point_transaction:write'])]
     private ?Order $order = null;
 

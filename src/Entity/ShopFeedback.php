@@ -21,13 +21,13 @@ class ShopFeedback
     #[Groups(['shop_feedback:read'])]
     private UuidV7 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'shopFeedbacks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Shop::class)]
+    #[ORM\JoinColumn(name: 'shop_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['shop_feedback:read', 'shop_feedback:write'])]
     private ?Shop $shop = null;
 
-    #[ORM\ManyToOne(inversedBy: 'shopFeedbacks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['shop_feedback:read', 'shop_feedback:write'])]
     private ?Customer $customer = null;
 

@@ -20,13 +20,13 @@ class OrderItem
     #[Groups(['order_item:read'])]
     private UuidV7 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'orderItems')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Order::class)]
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['order_item:read', 'order_item:write'])]
     private ?Order $order = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orderItems')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['order_item:read', 'order_item:write'])]
     private ?Product $product = null;
 

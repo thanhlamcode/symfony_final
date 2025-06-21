@@ -53,7 +53,8 @@ class Customer
     #[Groups(['customer:read', 'customer:write'])]
     private ?string $address = null;
 
-    #[ORM\ManyToOne(inversedBy: 'customers')]
+    #[ORM\ManyToOne(targetEntity: MemberShipLevel::class)]
+    #[ORM\JoinColumn(name: 'member_ship_level_id', referencedColumnName: 'id', nullable: true)]
     #[Groups(['customer:read', 'customer:write'])]
     private ?MemberShipLevel $memberShipLevel = null;
 

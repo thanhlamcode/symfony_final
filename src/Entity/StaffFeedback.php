@@ -21,8 +21,8 @@ class StaffFeedback
     #[Groups(['staff_feedback:read'])]
     private UuidV7 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'staffFeedbacks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Staff::class)]
+    #[ORM\JoinColumn(name: 'staff_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['staff_feedback:read', 'staff_feedback:write'])]
     private ?Staff $staff = null;
 

@@ -24,17 +24,18 @@ class Order
     #[Groups(['order:read'])]
     private UuidV7 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['order:read', 'order:write'])]
     private ?Customer $customer = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Shop::class)]
+    #[ORM\JoinColumn(name: 'shop_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['order:read', 'order:write'])]
     private ?Shop $shop = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\ManyToOne(targetEntity: Staff::class)]
+    #[ORM\JoinColumn(name: 'staff_id', referencedColumnName: 'id', nullable: true)]
     #[Groups(['order:read', 'order:write'])]
     private ?Staff $staff = null;
 

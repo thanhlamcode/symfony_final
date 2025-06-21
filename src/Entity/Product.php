@@ -29,8 +29,8 @@ class Product
     #[Groups(['product:read', 'product:write'])]
     private ProductStatus $status;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['product:read', 'product:write'])]
     private ?Category $category = null;
 

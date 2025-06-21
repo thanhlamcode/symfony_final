@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\UuidV7;
+use App\DiscountType;
+use App\CouponStatus;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['coupon:read']],
@@ -30,7 +32,8 @@ class Coupon
     #[Groups(['coupon:read', 'coupon:write'])]
     private string $code;
 
-    #[ORM\ManyToOne(inversedBy: 'coupons')]
+    #[ORM\ManyToOne(targetEntity: PromotionProgram::class)]
+    #[ORM\JoinColumn(name: 'promotion_program_id', referencedColumnName: 'id', nullable: true)]
     #[Groups(['coupon:read', 'coupon:write'])]
     private ?PromotionProgram $promotionProgram = null;
 

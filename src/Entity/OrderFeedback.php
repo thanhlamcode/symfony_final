@@ -21,8 +21,8 @@ class OrderFeedback
     #[Groups(['order_feedback:read'])]
     private UuidV7 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'orderFeedbacks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Order::class)]
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['order_feedback:read', 'order_feedback:write'])]
     private ?Order $order = null;
 

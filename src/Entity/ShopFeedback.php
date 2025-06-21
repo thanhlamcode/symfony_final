@@ -1,0 +1,133 @@
+<?php
+
+namespace App\Entity;
+
+use ApiPlatform\Metadata\ApiResource;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Uid\UuidV7;
+
+#[ApiResource(
+    normalizationContext: ['groups' => ['shop_feedback:read']],
+    denormalizationContext: ['groups' => ['shop_feedback:write']]
+)]
+#[ORM\Entity]
+class ShopFeedback
+{
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[Groups(['shop_feedback:read'])]
+    private UuidV7 $id;
+
+    #[ORM\ManyToOne(inversedBy: 'shopFeedbacks')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['shop_feedback:read', 'shop_feedback:write'])]
+    private ?Shop $shop = null;
+
+    #[ORM\ManyToOne(inversedBy: 'shopFeedbacks')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['shop_feedback:read', 'shop_feedback:write'])]
+    private ?Customer $customer = null;
+
+    #[ORM\Column(type: 'smallint', enumType: RatingValue::class)]
+    #[Groups(['shop_feedback:read', 'shop_feedback:write'])]
+    private RatingValue $rating;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['shop_feedback:read', 'shop_feedback:write'])]
+    private ?string $comment = null;
+
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['shop_feedback:read'])]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['shop_feedback:read'])]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    public function __construct()
+    {
+        $this->id = new UuidV7();
+    }
+
+    public function getId(): UuidV7
+    {
+        return $this->id;
+    }
+
+    public function getShop(): ?Shop
+    {
+        return $this->shop;
+    }
+
+    public function setShop(?Shop $shop): static
+    {
+        $this->shop = $shop;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer): static
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    public function getRating(): RatingValue
+    {
+        return $this->rating;
+    }
+
+    public function setRating(RatingValue $rating): static
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): static
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+} 

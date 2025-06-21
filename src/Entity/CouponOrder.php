@@ -25,7 +25,7 @@ class CouponOrder
     #[Groups(['coupon_order:read', 'coupon_order:write'])]
     private ?Order $order = null;
 
-    #[ORM\ManyToOne(targetEntity: Coupon::class, inversedBy: 'couponOrders')]
+    #[ORM\ManyToOne(targetEntity: Coupon::class)]
     #[ORM\JoinColumn(name: 'coupon_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['coupon_order:read', 'coupon_order:write'])]
     private ?Coupon $coupon = null;

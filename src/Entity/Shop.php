@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -60,12 +58,6 @@ class Shop
     #[Groups(['shop:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'shop', targetEntity: Order::class)]
-    private Collection $orders;
-
-    #[ORM\OneToMany(mappedBy: 'shop', targetEntity: ShopFeedback::class)]
-    private Collection $shopFeedbacks;
-
     #[ORM\OneToOne(mappedBy: 'shop', cascade: ['persist', 'remove'])]
     private ?ShopSetting $shopSetting = null;
 
@@ -73,8 +65,6 @@ class Shop
     {
         $this->id = new UuidV7();
         $this->status = ShopStatus::ACTIVE;
-        $this->orders = new ArrayCollection();
-        $this->shopFeedbacks = new ArrayCollection();
     }
 
     public function getId(): UuidV7
@@ -190,66 +180,6 @@ class Shop
         return $this;
     }
 
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): static
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setShop($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): static
-    {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getShop() === $this) {
-                $order->setShop(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ShopFeedback>
-     */
-    public function getShopFeedbacks(): Collection
-    {
-        return $this->shopFeedbacks;
-    }
-
-    public function addShopFeedback(ShopFeedback $shopFeedback): static
-    {
-        if (!$this->shopFeedbacks->contains($shopFeedback)) {
-            $this->shopFeedbacks->add($shopFeedback);
-            $shopFeedback->setShop($this);
-        }
-
-        return $this;
-    }
-
-    public function removeShopFeedback(ShopFeedback $shopFeedback): static
-    {
-        if ($this->shopFeedbacks->removeElement($shopFeedback)) {
-            // set the owning side to null (unless already changed)
-            if ($shopFeedback->getShop() === $this) {
-                $shopFeedback->setShop(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getShopSetting(): ?ShopSetting
     {
         return $this->shopSetting;
@@ -257,8 +187,13 @@ class Shop
 
     public function setShopSetting(ShopSetting $shopSetting): static
     {
+        // unset the owning side of the relation if necessary
+        if ($shopSetting === null && $this->shopSetting !== null) {
+            $this->shopSetting->setShop(null);
+        }
+
         // set the owning side of the relation if necessary
-        if ($shopSetting->getShop() !== $this) {
+        if ($shopSetting !== null && $shopSetting->getShop() !== $this) {
             $shopSetting->setShop($this);
         }
 
@@ -266,4 +201,4 @@ class Shop
 
         return $this;
     }
-}
+} 

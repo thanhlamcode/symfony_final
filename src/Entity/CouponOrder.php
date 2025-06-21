@@ -20,13 +20,13 @@ class CouponOrder
     #[Groups(['coupon_order:read'])]
     private UuidV7 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'couponOrders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Order::class)]
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['coupon_order:read', 'coupon_order:write'])]
     private ?Order $order = null;
 
-    #[ORM\ManyToOne(inversedBy: 'couponOrders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Coupon::class, inversedBy: 'couponOrders')]
+    #[ORM\JoinColumn(name: 'coupon_id', referencedColumnName: 'id', nullable: false)]
     #[Groups(['coupon_order:read', 'coupon_order:write'])]
     private ?Coupon $coupon = null;
 
@@ -96,4 +96,4 @@ class CouponOrder
 
         return $this;
     }
-} 
+}

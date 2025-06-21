@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\UuidV7;
-use App\DiscountType;
-use App\CouponStatus;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['coupon:read']],
@@ -67,7 +65,7 @@ class Coupon
     #[Groups(['coupon:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'coupon', targetEntity: CouponOrder::class)]
+    #[ORM\OneToMany(targetEntity: CouponOrder::class, mappedBy: 'coupon', cascade: ['persist', 'remove'])]
     private Collection $couponOrders;
 
     public function __construct()

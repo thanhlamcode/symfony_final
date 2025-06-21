@@ -69,28 +69,12 @@ class Order
     #[Groups(['order:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class, cascade: ['persist', 'remove'])]
-    private Collection $orderItems;
-
-    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderFeedback::class)]
-    private Collection $orderFeedbacks;
-
-    #[ORM\OneToMany(mappedBy: 'order', targetEntity: CouponOrder::class)]
-    private Collection $couponOrders;
-
-    #[ORM\OneToMany(mappedBy: 'order', targetEntity: CustomerPointTransaction::class)]
-    private Collection $customerPointTransactions;
-
     #[ORM\OneToOne(mappedBy: 'order', cascade: ['persist', 'remove'])]
     private ?ReturnOrder $returnOrder = null;
 
     public function __construct()
     {
         $this->id = new UuidV7();
-        $this->orderItems = new ArrayCollection();
-        $this->orderFeedbacks = new ArrayCollection();
-        $this->couponOrders = new ArrayCollection();
-        $this->customerPointTransactions = new ArrayCollection();
     }
 
     public function getId(): UuidV7
@@ -218,126 +202,6 @@ class Order
         return $this;
     }
 
-    /**
-     * @return Collection<int, OrderItem>
-     */
-    public function getOrderItems(): Collection
-    {
-        return $this->orderItems;
-    }
-
-    public function addOrderItem(OrderItem $orderItem): static
-    {
-        if (!$this->orderItems->contains($orderItem)) {
-            $this->orderItems->add($orderItem);
-            $orderItem->setOrder($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrderItem(OrderItem $orderItem): static
-    {
-        if ($this->orderItems->removeElement($orderItem)) {
-            // set the owning side to null (unless already changed)
-            if ($orderItem->getOrder() === $this) {
-                $orderItem->setOrder(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, OrderFeedback>
-     */
-    public function getOrderFeedbacks(): Collection
-    {
-        return $this->orderFeedbacks;
-    }
-
-    public function addOrderFeedback(OrderFeedback $orderFeedback): static
-    {
-        if (!$this->orderFeedbacks->contains($orderFeedback)) {
-            $this->orderFeedbacks->add($orderFeedback);
-            $orderFeedback->setOrder($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrderFeedback(OrderFeedback $orderFeedback): static
-    {
-        if ($this->orderFeedbacks->removeElement($orderFeedback)) {
-            // set the owning side to null (unless already changed)
-            if ($orderFeedback->getOrder() === $this) {
-                $orderFeedback->setOrder(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CouponOrder>
-     */
-    public function getCouponOrders(): Collection
-    {
-        return $this->couponOrders;
-    }
-
-    public function addCouponOrder(CouponOrder $couponOrder): static
-    {
-        if (!$this->couponOrders->contains($couponOrder)) {
-            $this->couponOrders->add($couponOrder);
-            $couponOrder->setOrder($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCouponOrder(CouponOrder $couponOrder): static
-    {
-        if ($this->couponOrders->removeElement($couponOrder)) {
-            // set the owning side to null (unless already changed)
-            if ($couponOrder->getOrder() === $this) {
-                $couponOrder->setOrder(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CustomerPointTransaction>
-     */
-    public function getCustomerPointTransactions(): Collection
-    {
-        return $this->customerPointTransactions;
-    }
-
-    public function addCustomerPointTransaction(CustomerPointTransaction $customerPointTransaction): static
-    {
-        if (!$this->customerPointTransactions->contains($customerPointTransaction)) {
-            $this->customerPointTransactions->add($customerPointTransaction);
-            $customerPointTransaction->setOrder($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCustomerPointTransaction(CustomerPointTransaction $customerPointTransaction): static
-    {
-        if ($this->customerPointTransactions->removeElement($customerPointTransaction)) {
-            // set the owning side to null (unless already changed)
-            if ($customerPointTransaction->getOrder() === $this) {
-                $customerPointTransaction->setOrder(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getReturnOrder(): ?ReturnOrder
     {
         return $this->returnOrder;
@@ -345,8 +209,13 @@ class Order
 
     public function setReturnOrder(ReturnOrder $returnOrder): static
     {
+        // unset the owning side of the relation if necessary
+        if ($returnOrder === null && $this->returnOrder !== null) {
+            $this->returnOrder->setOrder(null);
+        }
+
         // set the owning side of the relation if necessary
-        if ($returnOrder->getOrder() !== $this) {
+        if ($returnOrder !== null && $returnOrder->getOrder() !== $this) {
             $returnOrder->setOrder($this);
         }
 
@@ -354,4 +223,4 @@ class Order
 
         return $this;
     }
-}
+} 

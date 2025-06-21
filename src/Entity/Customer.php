@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -68,22 +66,10 @@ class Customer
     #[Groups(['customer:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Order::class)]
-    private Collection $orders;
-
-    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: ShopFeedback::class)]
-    private Collection $shopFeedbacks;
-
-    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: CustomerPointTransaction::class)]
-    private Collection $customerPointTransactions;
-
     public function __construct()
     {
         $this->id = new UuidV7();
         $this->status = CustomerStatus::ACTIVE;
-        $this->orders = new ArrayCollection();
-        $this->shopFeedbacks = new ArrayCollection();
-        $this->customerPointTransactions = new ArrayCollection();
     }
 
     public function getId(): UuidV7
@@ -210,94 +196,4 @@ class Customer
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): static
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setCustomer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): static
-    {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getCustomer() === $this) {
-                $order->setCustomer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ShopFeedback>
-     */
-    public function getShopFeedbacks(): Collection
-    {
-        return $this->shopFeedbacks;
-    }
-
-    public function addShopFeedback(ShopFeedback $shopFeedback): static
-    {
-        if (!$this->shopFeedbacks->contains($shopFeedback)) {
-            $this->shopFeedbacks->add($shopFeedback);
-            $shopFeedback->setCustomer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeShopFeedback(ShopFeedback $shopFeedback): static
-    {
-        if ($this->shopFeedbacks->removeElement($shopFeedback)) {
-            // set the owning side to null (unless already changed)
-            if ($shopFeedback->getCustomer() === $this) {
-                $shopFeedback->setCustomer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CustomerPointTransaction>
-     */
-    public function getCustomerPointTransactions(): Collection
-    {
-        return $this->customerPointTransactions;
-    }
-
-    public function addCustomerPointTransaction(CustomerPointTransaction $customerPointTransaction): static
-    {
-        if (!$this->customerPointTransactions->contains($customerPointTransaction)) {
-            $this->customerPointTransactions->add($customerPointTransaction);
-            $customerPointTransaction->setCustomer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCustomerPointTransaction(CustomerPointTransaction $customerPointTransaction): static
-    {
-        if ($this->customerPointTransactions->removeElement($customerPointTransaction)) {
-            // set the owning side to null (unless already changed)
-            if ($customerPointTransaction->getCustomer() === $this) {
-                $customerPointTransaction->setCustomer(null);
-            }
-        }
-
-        return $this;
-    }
-}
+} 

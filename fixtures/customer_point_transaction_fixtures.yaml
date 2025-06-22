@@ -1,10 +1,8 @@
 App\Entity\CustomerPointTransaction:
     customer_point_transaction_{1..2000}:
-        id: '<(Symfony\Component\Uid\Uuid::v7())>'
         customer: "@customer_<numberBetween(1, 500)>"
-        points: <numberBetween(10, 1000)>
-        type: <randomElement(['earned', 'redeemed', 'expired', 'bonus', 'adjustment'])>
-        description: <sentence()>
+        type: <pointTransactionType()>
+        amount: <numberBetween(10, 1000)>
         order: "@order_<numberBetween(1, 1000)>"
         createdAt: <dateTimeBetween('-1 year', '-1 day')>
         updatedAt: <dateTimeBetween('-1 day', 'now')>

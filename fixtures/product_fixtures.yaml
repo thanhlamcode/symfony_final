@@ -1,8 +1,7 @@
 App\Entity\Product:
     product_{1..300}:
-        id: '<(Symfony\Component\Uid\Uuid::v7())>'
         name: <randomElement(['Espresso', 'Cappuccino', 'Latte', 'Americano', 'Mocha', 'Macchiato', 'Flat White', 'Cortado', 'Ristretto', 'Long Black', 'Affogato', 'Irish Coffee', 'Turkish Coffee', 'Cold Brew', 'Iced Latte', 'Iced Americano', 'Frappuccino', 'Hot Chocolate', 'Chai Latte', 'Green Tea', 'Black Tea', 'Herbal Tea', 'Croissant', 'Danish Pastry', 'Muffin', 'Scone', 'Bagel', 'Sandwich', 'Panini', 'Burger', 'Pizza', 'Pasta', 'Salad', 'Soup', 'Steak', 'Chicken', 'Fish', 'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free', 'Sugar-Free'])>
-        status: <randomElement(['active', 'inactive'])>
+        status: <productStatus()>
         category: "@category_<numberBetween(1, 20)>"
         price: <numberBetween(500, 50000)>
         imageUrl: "https://picsum.photos/400/300?random=<current()>"

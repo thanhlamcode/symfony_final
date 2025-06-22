@@ -1,12 +1,11 @@
 App\Entity\Shop:
     shop_{1..50}:
-        id: '<(Symfony\Component\Uid\Uuid::v7())>'
         shopCode (unique): "<numberBetween(1000, 9999)>"
         name: "<company()>"
         address: "<address()>"
         email (unique): "<safeEmail()>"
         phone: '<(Brick\PhoneNumber\PhoneNumber::parse("+1" . mt_rand(1000000000, 9999999999)))>'
         avatarUrl: "https://api.dicebear.com/9.x/micah/svg?seed=<current()>"
-        status: <randomElement(['active', 'inactive', 'closed'])>
+        status: <shopStatus()>
         createdAt: <dateTimeBetween('-2 years', '-1 month')>
         updatedAt: <dateTimeBetween('-1 month', 'now')>

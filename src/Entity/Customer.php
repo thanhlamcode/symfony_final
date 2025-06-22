@@ -19,6 +19,7 @@ use App\Entity\Gender;
 class Customer
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['customer:read'])]
     private UuidV7 $id;

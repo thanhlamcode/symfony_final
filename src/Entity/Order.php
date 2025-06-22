@@ -20,6 +20,7 @@ use Symfony\Component\Uid\UuidV7;
 class Order
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['order:read'])]
     private UuidV7 $id;

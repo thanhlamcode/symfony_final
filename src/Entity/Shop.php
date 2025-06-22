@@ -16,6 +16,7 @@ use Symfony\Component\Uid\UuidV7;
 class Shop
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['shop:read'])]
     private UuidV7 $id;

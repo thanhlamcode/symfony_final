@@ -17,6 +17,7 @@ use Symfony\Component\Uid\UuidV7;
 class OrderFeedback
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['order_feedback:read'])]
     private UuidV7 $id;

@@ -17,6 +17,7 @@ use Symfony\Component\Uid\UuidV7;
 class ReturnOrder
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['return_order:read'])]
     private UuidV7 $id;

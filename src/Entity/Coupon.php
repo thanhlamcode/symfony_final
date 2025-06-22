@@ -16,6 +16,7 @@ use Symfony\Component\Uid\UuidV7;
 class Coupon
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['coupon:read'])]
     private UuidV7 $id;

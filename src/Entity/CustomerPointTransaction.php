@@ -16,6 +16,7 @@ use Symfony\Component\Uid\UuidV7;
 class CustomerPointTransaction
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['customer_point_transaction:read'])]
     private UuidV7 $id;

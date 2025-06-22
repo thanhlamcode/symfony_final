@@ -18,6 +18,7 @@ use Symfony\Component\Uid\UuidV7;
 class PromotionProgram
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['promotion_program:read'])]
     private UuidV7 $id;

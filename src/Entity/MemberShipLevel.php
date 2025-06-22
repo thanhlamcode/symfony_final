@@ -17,6 +17,7 @@ use Symfony\Component\Uid\UuidV7;
 class MemberShipLevel
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['member_ship_level:read'])]
     private UuidV7 $id;

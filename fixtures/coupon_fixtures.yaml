@@ -1,13 +1,13 @@
 App\Entity\Coupon:
     coupon_{1..100}:
         id: '<(Symfony\Component\Uid\Uuid::v7())>'
-        name: <randomElement(['Welcome Discount', 'Holiday Special', 'Weekend Sale', 'Student Discount', 'Senior Discount', 'Loyalty Reward', 'Birthday Special', 'First Order', 'Referral Bonus', 'Seasonal Sale', 'Clearance', 'Flash Sale', 'Member Exclusive', 'New Customer', 'Return Customer', 'Bulk Order', 'Early Bird', 'Late Night', 'Happy Hour', 'Weekday Special'])> <numberBetween(1, 999)>
-        code (unique): "<(strtoupper(substr(md5(uniqid()), 0, 8)))>"
+        name: <randomElement(['Welcome Discount', 'Holiday Special', 'Weekend Sale', 'Student Discount', 'Senior Discount', 'Loyalty Reward', 'Birthday Special', 'First Order', 'Referral Bonus', 'Seasonal Sale', 'Clearance', 'Flash Sale', 'Member Exclusive', 'New Customer', 'Return Customer', 'Bulk Order', 'Early Bird', 'Late Night', 'Happy Hour', 'Weekday Special'])>
+        code (unique): <numberBetween(1000, 9999)>
         promotionProgram: "@promotionProgram_<numberBetween(1, 20)>"
         discountType: <randomElement(['percentage', 'fixed_amount'])>
         value: <numberBetween(5, 50)>
         quantity: <numberBetween(10, 1000)>
         status: <randomElement(['active', 'inactive', 'expired'])>
-        minOrderValue: <optional(<numberBetween(1000, 20000)>)>
+        minOrderValue: <numberBetween(1000, 20000)>
         createdAt: <dateTimeBetween('-6 months', '-1 month')>
         updatedAt: <dateTimeBetween('-1 month', 'now')>

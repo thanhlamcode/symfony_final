@@ -2,9 +2,9 @@ App\Entity\OrderItem:
     order_item_{1..3000}:
         order: "@order_<numberBetween(1, 1000)>"
         product: "@product_<numberBetween(1, 300)>"
+        priceProduct: <numberBetween(500, 50000)>
+        productName: <randomElement(['Espresso', 'Cappuccino', 'Latte', 'Americano', 'Mocha', 'Macchiato', 'Flat White', 'Cortado', 'Ristretto', 'Long Black', 'Affogato', 'Irish Coffee', 'Turkish Coffee', 'Cold Brew', 'Iced Latte', 'Iced Americano', 'Frappuccino', 'Hot Chocolate', 'Chai Latte', 'Green Tea', 'Black Tea', 'Herbal Tea', 'Croissant', 'Danish Pastry', 'Muffin', 'Scone', 'Bagel', 'Sandwich', 'Panini', 'Burger', 'Pizza', 'Pasta', 'Salad', 'Soup', 'Steak', 'Chicken', 'Fish', 'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free', 'Sugar-Free'])>
         quantity: <numberBetween(1, 10)>
-        unitPrice: <numberBetween(500, 50000)>
         totalPrice: <numberBetween(500, 50000)>
-        note: <optional(<sentence()>)>
         createdAt: <dateTimeBetween('-1 year', '-1 day')>
         updatedAt: <dateTimeBetween('-1 day', 'now')>

@@ -7,6 +7,6 @@ App\Entity\Order:
         discountTotal: <numberBetween(0, 10000)>
         total: <numberBetween(1000, 50000)>
         paymentMethod: <paymentMethod()>
-        note: <optional(<sentence()>)>
+        note: <sentence()>
         createdAt: <dateTimeBetween('-1 year', '-1 day')>
         updatedAt: <dateTimeBetween('-1 day', 'now')>

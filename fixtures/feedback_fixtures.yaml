@@ -1,9 +1,8 @@
 App\Entity\OrderFeedback:
     order_feedback_{1..800}:
         order: "@order_<numberBetween(1, 1000)>"
-        customer: "@customer_<numberBetween(1, 500)>"
         rating: <ratingValue()>
-        comment: <optional(<paragraph()>)>
+        comment: <paragraph()>
         createdAt: <dateTimeBetween('-1 year', '-1 day')>
         updatedAt: <dateTimeBetween('-1 day', 'now')>
 
@@ -12,7 +11,7 @@ App\Entity\ShopFeedback:
         shop: "@shop_<numberBetween(1, 50)>"
         customer: "@customer_<numberBetween(1, 500)>"
         rating: <ratingValue()>
-        comment: <optional(<paragraph()>)>
+        comment: <paragraph()>
         createdAt: <dateTimeBetween('-1 year', '-1 day')>
         updatedAt: <dateTimeBetween('-1 day', 'now')>
 
@@ -21,6 +20,6 @@ App\Entity\StaffFeedback:
         staff: "@staff_<numberBetween(1, 200)>"
         customer: "@customer_<numberBetween(1, 500)>"
         rating: <ratingValue()>
-        comment: <optional(<paragraph()>)>
+        comment: <paragraph()>
         createdAt: <dateTimeBetween('-1 year', '-1 day')>
         updatedAt: <dateTimeBetween('-1 day', 'now')>

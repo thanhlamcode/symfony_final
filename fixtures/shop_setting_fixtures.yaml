@@ -3,7 +3,7 @@ App\Entity\ShopSetting:
         shop: "@shop_<numberBetween(1, 50)>"
         openTime: <dateTimeBetween('06:00', '10:00')>
         closeTime: <dateTimeBetween('20:00', '23:00')>
-        workingDays: <randomElement([['monday', 'tuesday', 'wednesday', 'thursday', 'friday'], ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'], ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']])>
+        workingDays: <workingDays()>
         avatarUrl: "https://api.dicebear.com/9.x/micah/svg?seed=<current()>"
         createdAt: <dateTimeBetween('-1 year', '-1 month')>
         updatedAt: <dateTimeBetween('-1 month', 'now')>

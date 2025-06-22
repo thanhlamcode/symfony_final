@@ -82,4 +82,14 @@ class EnumProvider extends Base
     {
         return $this->generator->randomElement(RatingValue::cases())->value;
     }
+
+    public function workingDays(): array
+    {
+        $options = [
+            ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
+            ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+            ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+        ];
+        return $this->generator->randomElement($options);
+    }
 } 

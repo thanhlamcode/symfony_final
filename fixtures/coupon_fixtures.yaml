@@ -1,7 +1,7 @@
 App\Entity\Coupon:
     coupon_{1..100}:
         name: <randomElement(['Welcome Discount', 'Holiday Special', 'Weekend Sale', 'Student Discount', 'Senior Discount', 'Loyalty Reward', 'Birthday Special', 'First Order', 'Referral Bonus', 'Seasonal Sale', 'Clearance', 'Flash Sale', 'Member Exclusive', 'New Customer', 'Return Customer', 'Bulk Order', 'Early Bird', 'Late Night', 'Happy Hour', 'Weekday Special'])>
-        code (unique): <numberBetween(1000, 9999)>
+        code (unique): "<(strtoupper(substr(md5(uniqid()), 0, 8)))>"
         promotionProgram: "@promotionProgram_<numberBetween(1, 20)>"
         discountType: <discountType()>
         value: <numberBetween(5, 50)>

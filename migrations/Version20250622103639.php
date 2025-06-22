@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250622074658 extends AbstractMigration
+final class Version20250622103639 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -132,7 +132,7 @@ final class Version20250622074658 extends AbstractMigration
             COMMENT ON COLUMN member_ship_level.updated_at IS '(DC2Type:datetime_immutable)'
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE "order" (id UUID NOT NULL, customer_id UUID NOT NULL, shop_id UUID NOT NULL, staff_id INT DEFAULT NULL, sub_total DOUBLE PRECISION NOT NULL, discount_total DOUBLE PRECISION NOT NULL, total DOUBLE PRECISION NOT NULL, payment_method VARCHAR(255) NOT NULL, note TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
+            CREATE TABLE "order" (id UUID NOT NULL, customer_id UUID NOT NULL, shop_id UUID NOT NULL, staff_id UUID DEFAULT NULL, sub_total DOUBLE PRECISION NOT NULL, discount_total DOUBLE PRECISION NOT NULL, total DOUBLE PRECISION NOT NULL, payment_method VARCHAR(255) NOT NULL, note TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
             CREATE INDEX IDX_F52993989395C3F3 ON "order" (customer_id)
@@ -151,6 +151,9 @@ final class Version20250622074658 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN "order".shop_id IS '(DC2Type:uuid)'
+        SQL);
+        $this->addSql(<<<'SQL'
+            COMMENT ON COLUMN "order".staff_id IS '(DC2Type:uuid)'
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN "order".created_at IS '(DC2Type:datetime_immutable)'
@@ -309,19 +312,31 @@ final class Version20250622074658 extends AbstractMigration
             COMMENT ON COLUMN shop_setting.updated_at IS '(DC2Type:datetime_immutable)'
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE staff (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) DEFAULT NULL, position VARCHAR(100) NOT NULL, is_active BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))
+            CREATE TABLE staff (id UUID NOT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) DEFAULT NULL, position VARCHAR(100) NOT NULL, is_active BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
             CREATE UNIQUE INDEX UNIQ_426EF392E7927C74 ON staff (email)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE staff_feedback (id UUID NOT NULL, staff_id INT NOT NULL, rating SMALLINT NOT NULL, comment TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
+            COMMENT ON COLUMN staff.id IS '(DC2Type:uuid)'
+        SQL);
+        $this->addSql(<<<'SQL'
+            COMMENT ON COLUMN staff.created_at IS '(DC2Type:datetime_immutable)'
+        SQL);
+        $this->addSql(<<<'SQL'
+            COMMENT ON COLUMN staff.updated_at IS '(DC2Type:datetime_immutable)'
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE TABLE staff_feedback (id UUID NOT NULL, staff_id UUID NOT NULL, rating SMALLINT NOT NULL, comment TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
             CREATE INDEX IDX_F077E4F6D4D57CD ON staff_feedback (staff_id)
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN staff_feedback.id IS '(DC2Type:uuid)'
+        SQL);
+        $this->addSql(<<<'SQL'
+            COMMENT ON COLUMN staff_feedback.staff_id IS '(DC2Type:uuid)'
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN staff_feedback.created_at IS '(DC2Type:datetime_immutable)'

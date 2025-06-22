@@ -99,7 +99,6 @@ class Shop
 
     public function __construct()
     {
-        $this->id = new UuidV7();
         $this->status = ShopStatus::ACTIVE;
     }
 

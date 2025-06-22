@@ -75,7 +75,7 @@ class Order
 
     public function __construct()
     {
-        $this->id = new UuidV7();
+        $this->status = ReturnStatus::PENDING;
     }
 
     public function getId(): UuidV7

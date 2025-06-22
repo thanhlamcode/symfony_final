@@ -27,7 +27,6 @@ class CreateProductProcessor implements ProcessorInterface
     {
         $product = new Product();
 
-        $product->setId($data->id);
         $product->setName($data->name);
         $product->setPrice($data->price);
         $product->setCategory($data->category);

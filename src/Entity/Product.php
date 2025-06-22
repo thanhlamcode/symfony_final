@@ -82,7 +82,6 @@ class Product
 
     public function __construct()
     {
-        $this->id = new UuidV7();
         $this->status = ProductStatus::ACTIVE;
     }
 

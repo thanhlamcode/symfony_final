@@ -66,7 +66,7 @@ class Coupon
 
     public function __construct()
     {
-        $this->id = new UuidV7();
+        $this->status = CouponStatus::ACTIVE;
     }
 
     public function getId(): UuidV7

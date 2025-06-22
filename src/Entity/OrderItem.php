@@ -58,7 +58,6 @@ class OrderItem
 
     public function __construct()
     {
-        $this->id = new UuidV7();
     }
 
     public function getId(): UuidV7

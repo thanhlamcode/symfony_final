@@ -25,7 +25,7 @@ class UpdateProductProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Product
     {
-        $product = $this->entityManager->find(Product::class, $data->id);
+        $product = $this->entityManager->find(Product::class, $uriVariables['id']);
         
         if (!$product) {
             throw new \InvalidArgumentException('Product not found');

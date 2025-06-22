@@ -18,7 +18,6 @@ use App\Entity\Gender;
 use App\Entity\MemberShipLevel;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\ORMException;
-use Symfony\Component\Uid\UuidV7;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Post(
@@ -36,11 +35,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 final readonly class CreateCustomer
 {
     public function __construct(
-        #[Assert\NotBlank]
-        #[Assert\Uuid]
-        #[ApiProperty(openapiContext: ['example' => 'd36f7f32-9f20-7e7a-9014-5b79e2bc5671'])]
-        public string|UuidV7 $id,
-
         #[Assert\NotBlank]
         #[Assert\Length(min: 2, max: 255)]
         #[ApiProperty(openapiContext: ['example' => 'John Doe'])]

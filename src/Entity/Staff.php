@@ -79,7 +79,7 @@ class Staff
 
     public function __construct()
     {
-        $this->id = new UuidV7();
+        $this->status = StaffStatus::ACTIVE;
     }
 
     public function getId(): UuidV7

@@ -51,8 +51,7 @@ class ReturnOrder
 
     public function __construct()
     {
-        $this->id = new UuidV7();
-        $this->status = ReturnOrderStatus::REQUESTED;
+        $this->status = ReturnOrderStatus::PENDING;
     }
 
     public function getId(): UuidV7

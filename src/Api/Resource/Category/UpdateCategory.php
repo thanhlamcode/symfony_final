@@ -16,7 +16,6 @@ use App\Entity\Category;
 use App\Entity\CategoryStatus;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\ORMException;
-use Symfony\Component\Uid\UuidV7;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Patch(
@@ -34,11 +33,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 final readonly class UpdateCategory
 {
     public function __construct(
-        #[Assert\NotBlank]
-        #[Assert\Uuid]
-        #[ApiProperty(openapiContext: ['example' => 'd36f7f32-9f20-7e7a-9014-5b79e2bc5671'])]
-        public string|UuidV7 $id,
-
         #[Assert\Length(min: 2, max: 255)]
         #[ApiProperty(openapiContext: ['example' => 'Coffee'])]
         public ?string $name = null,

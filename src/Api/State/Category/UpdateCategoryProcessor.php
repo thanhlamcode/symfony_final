@@ -25,7 +25,7 @@ class UpdateCategoryProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Category
     {
-        $category = $this->entityManager->find(Category::class, $data->id);
+        $category = $this->entityManager->find(Category::class, $uriVariables['id']);
         
         if (!$category) {
             throw new \InvalidArgumentException('Category not found');

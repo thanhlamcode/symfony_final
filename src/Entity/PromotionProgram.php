@@ -55,7 +55,6 @@ class PromotionProgram
 
     public function __construct()
     {
-        $this->id = new UuidV7();
         $this->status = PromotionProgramStatus::ACTIVE;
     }
 

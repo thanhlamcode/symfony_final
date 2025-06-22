@@ -104,7 +104,6 @@ class Customer
 
     public function __construct()
     {
-        $this->id = new UuidV7();
         $this->status = CustomerStatus::ACTIVE;
     }
 

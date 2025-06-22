@@ -27,7 +27,6 @@ class CreateCategoryProcessor implements ProcessorInterface
     {
         $category = new Category();
 
-        $category->setId($data->id);
         $category->setName($data->name);
         $category->setDescription($data->description);
         $category->setStatus(CategoryStatus::from($data->status));

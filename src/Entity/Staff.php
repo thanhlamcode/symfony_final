@@ -2,65 +2,115 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Uid\UuidV7;
 
+#[ApiResource(
+    operations: [
+        new Get(
+            uriTemplate: '/staff/{id}.{_format}',
+            requirements: [
+                'id' => Requirement::UUID_V7,
+            ],
+            openapi: new Operation(
+                tags: ['Staff']
+            ),
+            normalizationContext: ['groups' => ['api:staff:get', 'api:staff']],
+        ),
+        new GetCollection(
+            uriTemplate: '/staff.{_format}',
+            openapi: new Operation(
+                tags: ['Staff']
+            ),
+            normalizationContext: ['groups' => ['api:staff:get_collection', 'api:staff']]
+        ),
+        new Delete()
+    ]
+)]
 #[ORM\Entity]
-#[ApiResource]
 class Staff
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
+    private UuidV7 $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private ?string $name = null;
+    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
+    private string $name;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private ?string $email = null;
+    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
+    private string $email;
 
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
     private ?string $phone = null;
 
     #[ORM\Column(type: 'string', length: 100)]
-    private ?string $position = null;
+    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
+    private string $position;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
     private bool $isActive = true;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $createdAt = null;
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
+    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->id = new UuidV7();
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV7
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function setId(UuidV7|string $id): void
+    {
+        if (is_string($id)) {
+            $id = UuidV7::fromString($id);
+        }
+        $this->id = $id;
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(?string $name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail(?string $email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
@@ -75,12 +125,12 @@ class Staff
         $this->phone = $phone;
     }
 
-    public function getPosition(): ?string
+    public function getPosition(): string
     {
         return $this->position;
     }
 
-    public function setPosition(?string $position): void
+    public function setPosition(string $position): void
     {
         $this->position = $position;
     }
@@ -95,22 +145,22 @@ class Staff
         $this->isActive = $isActive;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeInterface $createdAt): void
+    public function setCreatedAt(\DateTimeImmutable $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): void
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

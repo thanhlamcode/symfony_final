@@ -15,6 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\UuidV7;
+use App\Service\UuidGenerator;
 
 #[ApiResource(
     operations: [
@@ -51,48 +52,49 @@ use Symfony\Component\Uid\UuidV7;
 class Shop
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
-    private UuidV7 $id;
+    #[Groups(['api:shop:read'])]
+    private ?UuidV7 $id = null;
 
-    #[ORM\Column(unique: true)]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
+    #[ORM\Column]
+    #[Groups(['api:shop:read'])]
     private int $shopCode;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
+    #[Groups(['api:shop:read'])]
     private string $name;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
+    #[Groups(['api:shop:read'])]
     private string $address;
 
-    #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
+    #[ORM\Column(length: 180)]
+    #[Groups(['api:shop:read'])]
     private string $email;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
+    #[Groups(['api:shop:read'])]
     private string $phone;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
+    #[Groups(['api:shop:read'])]
     private ?string $avatarUrl = null;
 
     #[ORM\Column(enumType: ShopStatus::class)]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
+    #[Groups(['api:shop:read'])]
     private ShopStatus $status;
 
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[Groups(['api:shop:read'])]
+    private \DateTimeInterface $createdAt;
 
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'update')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['api:shop', 'api:shop:get', 'api:shop:get_collection'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[Groups(['api:shop:read'])]
+    private \DateTimeInterface $updatedAt;
 
     #[ORM\OneToOne(mappedBy: 'shop', cascade: ['persist', 'remove'])]
     private ?ShopSetting $shopSetting = null;
@@ -102,7 +104,7 @@ class Shop
         $this->status = ShopStatus::ACTIVE;
     }
 
-    public function getId(): UuidV7
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }
@@ -199,28 +201,24 @@ class Shop
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
-
-        return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     public function getShopSetting(): ?ShopSetting

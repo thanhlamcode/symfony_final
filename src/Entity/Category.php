@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright (c) 2025 Fastboy Marketing
+ */
+
+declare (strict_types = 1);
+
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -23,14 +29,14 @@ use Symfony\Component\Uid\UuidV7;
             openapi: new Operation(
                 tags: ['Category']
             ),
-            normalizationContext: ['groups' => ['api:category:get', 'api:category']],
+            normalizationContext: ['groups' => ['api:category:read']],
         ),
         new GetCollection(
             uriTemplate: '/categories.{_format}',
             openapi: new Operation(
                 tags: ['Category']
             ),
-            normalizationContext: ['groups' => ['api:category:get_collection', 'api:category']]
+            normalizationContext: ['groups' => ['api:category:read']]
         ),
         new Delete()
     ]
@@ -39,49 +45,42 @@ use Symfony\Component\Uid\UuidV7;
 class Category
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['api:category', 'api:category:get', 'api:category:get_collection'])]
-    private UuidV7 $id;
+    #[Groups(['api:category:read'])]
+    private ?UuidV7 $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:category', 'api:category:get', 'api:category:get_collection'])]
+    #[Groups(['api:category:read'])]
     private string $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['api:category', 'api:category:get', 'api:category:get_collection'])]
+    #[Groups(['api:category:read'])]
     private ?string $description = null;
 
     #[ORM\Column(enumType: CategoryStatus::class)]
-    #[Groups(['api:category', 'api:category:get', 'api:category:get_collection'])]
+    #[Groups(['api:category:read'])]
     private CategoryStatus $status;
 
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['api:category', 'api:category:get', 'api:category:get_collection'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[Groups(['api:category:read'])]
+    private \DateTimeInterface $createdAt;
 
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'update')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['api:category', 'api:category:get', 'api:category:get_collection'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[Groups(['api:category:read'])]
+    private \DateTimeInterface $updatedAt;
 
     public function __construct()
     {
         $this->status = CategoryStatus::ACTIVE;
     }
 
-    public function getId(): UuidV7
+    public function getId(): ?UuidV7
     {
         return $this->id;
-    }
-
-    public function setId(UuidV7|string $id): void
-    {
-        if (is_string($id)) {
-            $id = UuidV7::fromString($id);
-        }
-        $this->id = $id;
     }
 
     public function getName(): string
@@ -89,11 +88,9 @@ class Category
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getDescription(): ?string
@@ -101,11 +98,9 @@ class Category
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
     public function getStatus(): CategoryStatus
@@ -113,34 +108,28 @@ class Category
         return $this->status;
     }
 
-    public function setStatus(CategoryStatus $status): static
+    public function setStatus(CategoryStatus $status): void
     {
         $this->status = $status;
-
-        return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
-
-        return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
     }
-} 
+}

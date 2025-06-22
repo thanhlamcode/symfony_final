@@ -15,6 +15,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\UuidV7;
+use App\Service\UuidGenerator;
+use Doctrine\DBAL\Types\Types;
 
 #[ApiResource(
     operations: [
@@ -42,47 +44,61 @@ use Symfony\Component\Uid\UuidV7;
 class Staff
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
-    private UuidV7 $id;
+    #[Groups(['api:staff:read'])]
+    private ?UuidV7 $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
+    #[ORM\Column(length: 255)]
+    #[Groups(['api:staff:read'])]
     private string $name;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
-    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
+    #[ORM\Column(length: 180)]
+    #[Groups(['api:staff:read'])]
     private string $email;
 
-    #[ORM\Column(type: 'string', length: 20, nullable: true)]
-    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
-    private ?string $phone = null;
+    #[ORM\Column(length: 255)]
+    #[Groups(['api:staff:read'])]
+    private string $phone;
 
-    #[ORM\Column(type: 'string', length: 100)]
-    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
-    private string $position;
+    #[ORM\Column(length: 255, nullable: true, enumType: Gender::class)]
+    #[Groups(['api:staff:read'])]
+    private ?Gender $gender = null;
 
-    #[ORM\Column(type: 'boolean')]
-    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
-    private bool $isActive = true;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['api:staff:read'])]
+    private ?\DateTimeInterface $birthday = null;
 
+    #[ORM\Column(enumType: StaffStatus::class)]
+    #[Groups(['api:staff:read'])]
+    private StaffStatus $status;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['api:staff:read'])]
+    private ?string $address = null;
+
+    #[ORM\ManyToOne(targetEntity: Shop::class)]
+    #[ORM\JoinColumn(name: 'shop_id', referencedColumnName: 'id', nullable: true)]
+    #[Groups(['api:staff:read'])]
+    private ?Shop $shop = null;
+
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[Groups(['api:staff:read'])]
+    private \DateTimeInterface $createdAt;
 
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'update')]
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    #[Groups(['api:staff', 'api:staff:get', 'api:staff:get_collection'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[Groups(['api:staff:read'])]
+    private \DateTimeInterface $updatedAt;
 
     public function __construct()
     {
         $this->status = StaffStatus::ACTIVE;
     }
 
-    public function getId(): UuidV7
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }
@@ -115,52 +131,82 @@ class Staff
         $this->email = $email;
     }
 
-    public function getPhone(): ?string
+    public function getPhone(): string
     {
         return $this->phone;
     }
 
-    public function setPhone(?string $phone): void
+    public function setPhone(string $phone): void
     {
         $this->phone = $phone;
     }
 
-    public function getPosition(): string
+    public function getGender(): ?Gender
     {
-        return $this->position;
+        return $this->gender;
     }
 
-    public function setPosition(string $position): void
+    public function setGender(?Gender $gender): void
     {
-        $this->position = $position;
+        $this->gender = $gender;
     }
 
-    public function isActive(): bool
+    public function getBirthday(): ?\DateTimeInterface
     {
-        return $this->isActive;
+        return $this->birthday;
     }
 
-    public function setIsActive(bool $isActive): void
+    public function setBirthday(?\DateTimeInterface $birthday): void
     {
-        $this->isActive = $isActive;
+        $this->birthday = $birthday;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getStatus(): StaffStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(StaffStatus $status): void
+    {
+        $this->status = $status;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getShop(): ?Shop
+    {
+        return $this->shop;
+    }
+
+    public function setShop(?Shop $shop): void
+    {
+        $this->shop = $shop;
+    }
+
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): void
+    public function setCreatedAt(\DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

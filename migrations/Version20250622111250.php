@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250622103639 extends AbstractMigration
+final class Version20250622111250 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -25,12 +25,6 @@ final class Version20250622103639 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN category.id IS '(DC2Type:uuid)'
-        SQL);
-        $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN category.created_at IS '(DC2Type:datetime_immutable)'
-        SQL);
-        $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN category.updated_at IS '(DC2Type:datetime_immutable)'
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE coupon (id UUID NOT NULL, promotion_program_id UUID DEFAULT NULL, name VARCHAR(255) NOT NULL, code VARCHAR(255) NOT NULL, discount_type VARCHAR(255) NOT NULL, value DOUBLE PRECISION NOT NULL, quantity INT NOT NULL, status VARCHAR(255) NOT NULL, min_order_value DOUBLE PRECISION DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
@@ -88,12 +82,6 @@ final class Version20250622103639 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN customer.member_ship_level_id IS '(DC2Type:uuid)'
-        SQL);
-        $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN customer.created_at IS '(DC2Type:datetime_immutable)'
-        SQL);
-        $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN customer.updated_at IS '(DC2Type:datetime_immutable)'
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE customer_point_transaction (id UUID NOT NULL, customer_id UUID NOT NULL, order_id UUID DEFAULT NULL, type VARCHAR(255) NOT NULL, amount INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
@@ -216,12 +204,6 @@ final class Version20250622103639 extends AbstractMigration
             COMMENT ON COLUMN product.category_id IS '(DC2Type:uuid)'
         SQL);
         $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN product.created_at IS '(DC2Type:datetime_immutable)'
-        SQL);
-        $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN product.updated_at IS '(DC2Type:datetime_immutable)'
-        SQL);
-        $this->addSql(<<<'SQL'
             CREATE TABLE promotion_program (id UUID NOT NULL, name VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, start_date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, end_date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, status VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
@@ -255,19 +237,7 @@ final class Version20250622103639 extends AbstractMigration
             CREATE TABLE shop (id UUID NOT NULL, shop_code INT NOT NULL, name VARCHAR(255) NOT NULL, address VARCHAR(255) NOT NULL, email VARCHAR(180) NOT NULL, phone VARCHAR(255) NOT NULL, avatar_url VARCHAR(255) DEFAULT NULL, status VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE UNIQUE INDEX UNIQ_AC6A4CA2B6E7D6E3 ON shop (shop_code)
-        SQL);
-        $this->addSql(<<<'SQL'
-            CREATE UNIQUE INDEX UNIQ_AC6A4CA2E7927C74 ON shop (email)
-        SQL);
-        $this->addSql(<<<'SQL'
             COMMENT ON COLUMN shop.id IS '(DC2Type:uuid)'
-        SQL);
-        $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN shop.created_at IS '(DC2Type:datetime_immutable)'
-        SQL);
-        $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN shop.updated_at IS '(DC2Type:datetime_immutable)'
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE shop_feedback (id UUID NOT NULL, shop_id UUID NOT NULL, customer_id UUID NOT NULL, rating SMALLINT NOT NULL, comment TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
@@ -312,19 +282,16 @@ final class Version20250622103639 extends AbstractMigration
             COMMENT ON COLUMN shop_setting.updated_at IS '(DC2Type:datetime_immutable)'
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE staff (id UUID NOT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) DEFAULT NULL, position VARCHAR(100) NOT NULL, is_active BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))
+            CREATE TABLE staff (id UUID NOT NULL, shop_id UUID DEFAULT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(180) NOT NULL, phone VARCHAR(255) NOT NULL, gender VARCHAR(255) DEFAULT NULL, birthday TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, status VARCHAR(255) NOT NULL, address TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE UNIQUE INDEX UNIQ_426EF392E7927C74 ON staff (email)
+            CREATE INDEX IDX_426EF3924D16C4DD ON staff (shop_id)
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN staff.id IS '(DC2Type:uuid)'
         SQL);
         $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN staff.created_at IS '(DC2Type:datetime_immutable)'
-        SQL);
-        $this->addSql(<<<'SQL'
-            COMMENT ON COLUMN staff.updated_at IS '(DC2Type:datetime_immutable)'
+            COMMENT ON COLUMN staff.shop_id IS '(DC2Type:uuid)'
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE staff_feedback (id UUID NOT NULL, staff_id UUID NOT NULL, rating SMALLINT NOT NULL, comment TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
@@ -396,6 +363,9 @@ final class Version20250622103639 extends AbstractMigration
             ALTER TABLE shop_setting ADD CONSTRAINT FK_9C47F8B24D16C4DD FOREIGN KEY (shop_id) REFERENCES shop (id) NOT DEFERRABLE INITIALLY IMMEDIATE
         SQL);
         $this->addSql(<<<'SQL'
+            ALTER TABLE staff ADD CONSTRAINT FK_426EF3924D16C4DD FOREIGN KEY (shop_id) REFERENCES shop (id) NOT DEFERRABLE INITIALLY IMMEDIATE
+        SQL);
+        $this->addSql(<<<'SQL'
             ALTER TABLE staff_feedback ADD CONSTRAINT FK_F077E4F6D4D57CD FOREIGN KEY (staff_id) REFERENCES staff (id) NOT DEFERRABLE INITIALLY IMMEDIATE
         SQL);
     }
@@ -456,6 +426,9 @@ final class Version20250622103639 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE shop_setting DROP CONSTRAINT FK_9C47F8B24D16C4DD
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE staff DROP CONSTRAINT FK_426EF3924D16C4DD
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE staff_feedback DROP CONSTRAINT FK_F077E4F6D4D57CD

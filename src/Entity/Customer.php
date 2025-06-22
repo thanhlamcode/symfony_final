@@ -10,11 +10,14 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\Serializer\Filter\PropertyFilter;
+use App\Service\UuidGenerator;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\UuidV7;
 use App\Entity\CustomerStatus;
 use App\Entity\Gender;
@@ -29,14 +32,14 @@ use App\Entity\Gender;
             openapi: new Operation(
                 tags: ['Customer']
             ),
-            normalizationContext: ['groups' => ['api:customer:get', 'api:customer']],
+            normalizationContext: ['groups' => ['api:customer:read']],
         ),
         new GetCollection(
             uriTemplate: '/customers.{_format}',
             openapi: new Operation(
                 tags: ['Customer']
             ),
-            normalizationContext: ['groups' => ['api:customer:get_collection', 'api:customer']]
+            normalizationContext: ['groups' => ['api:customer:read']]
         ),
         new Delete()
     ]
@@ -54,60 +57,61 @@ use App\Entity\Gender;
 class Customer
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
-    private UuidV7 $id;
+    #[Groups(['api:customer:read'])]
+    private ?UuidV7 $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
+    #[Groups(['api:customer:read'])]
     private string $name;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
+    #[Groups(['api:customer:read'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
+    #[Groups(['api:customer:read'])]
     private string $email;
 
     #[ORM\Column(length: 255, nullable: true, enumType: Gender::class)]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
+    #[Groups(['api:customer:read'])]
     private ?Gender $gender = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
+    #[Groups(['api:customer:read'])]
     private ?\DateTimeInterface $birthday = null;
 
     #[ORM\Column(enumType: CustomerStatus::class)]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
+    #[Groups(['api:customer:read'])]
     private CustomerStatus $status;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
+    #[Groups(['api:customer:read'])]
     private ?string $address = null;
 
     #[ORM\ManyToOne(targetEntity: MemberShipLevel::class)]
     #[ORM\JoinColumn(name: 'member_ship_level_id', referencedColumnName: 'id', nullable: true)]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
+    #[Groups(['api:customer:read'])]
     private ?MemberShipLevel $memberShipLevel = null;
 
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[Groups(['api:customer:read'])]
+    private \DateTimeInterface $createdAt;
 
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'update')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['api:customer', 'api:customer:get', 'api:customer:get_collection'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[Groups(['api:customer:read'])]
+    private \DateTimeInterface $updatedAt;
 
     public function __construct()
     {
         $this->status = CustomerStatus::ACTIVE;
     }
 
-    public function getId(): UuidV7
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }
@@ -216,27 +220,23 @@ class Customer
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
-
-        return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 } 

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright (c) 2025 Fastboy Marketing
+ */
+
+declare (strict_types = 1);
+
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -24,14 +30,14 @@ use Symfony\Component\Uid\UuidV7;
             openapi: new Operation(
                 tags: ['Product']
             ),
-            normalizationContext: ['groups' => ['api:product:get', 'api:product']],
+            normalizationContext: ['groups' => ['api:product:read']],
         ),
         new GetCollection(
             uriTemplate: '/products.{_format}',
             openapi: new Operation(
                 tags: ['Product']
             ),
-            normalizationContext: ['groups' => ['api:product:get_collection', 'api:product']]
+            normalizationContext: ['groups' => ['api:product:read']]
         ),
         new Delete()
     ]
@@ -40,62 +46,55 @@ use Symfony\Component\Uid\UuidV7;
 class Product
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['api:product', 'api:product:get', 'api:product:get_collection'])]
-    private UuidV7 $id;
+    #[Groups(['api:product:read'])]
+    private ?UuidV7 $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:product', 'api:product:get', 'api:product:get_collection'])]
+    #[Groups(['api:product:read'])]
     private string $name;
 
     #[ORM\Column(enumType: ProductStatus::class)]
-    #[Groups(['api:product', 'api:product:get', 'api:product:get_collection'])]
+    #[Groups(['api:product:read'])]
     private ProductStatus $status;
 
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
-    #[Groups(['api:product', 'api:product:get', 'api:product:get_collection'])]
+    #[Groups(['api:product:read'])]
     private ?Category $category = null;
 
     #[ORM\Column]
-    #[Groups(['api:product', 'api:product:get', 'api:product:get_collection'])]
+    #[Groups(['api:product:read'])]
     private int $price;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['api:product', 'api:product:get', 'api:product:get_collection'])]
+    #[Groups(['api:product:read'])]
     private ?string $imageUrl = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['api:product', 'api:product:get', 'api:product:get_collection'])]
+    #[Groups(['api:product:read'])]
     private ?string $description = null;
 
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['api:product', 'api:product:get', 'api:product:get_collection'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[Groups(['api:product:read'])]
+    private \DateTimeInterface $createdAt;
 
+    #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'update')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['api:product', 'api:product:get', 'api:product:get_collection'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[Groups(['api:product:read'])]
+    private \DateTimeInterface $updatedAt;
 
     public function __construct()
     {
         $this->status = ProductStatus::ACTIVE;
     }
 
-    public function getId(): UuidV7
+    public function getId(): ?UuidV7
     {
         return $this->id;
-    }
-
-    public function setId(UuidV7|string $id): void
-    {
-        if (is_string($id)) {
-            $id = UuidV7::fromString($id);
-        }
-        $this->id = $id;
     }
 
     public function getName(): string
@@ -103,11 +102,9 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getStatus(): ProductStatus
@@ -115,11 +112,9 @@ class Product
         return $this->status;
     }
 
-    public function setStatus(ProductStatus $status): static
+    public function setStatus(ProductStatus $status): void
     {
         $this->status = $status;
-
-        return $this;
     }
 
     public function getCategory(): ?Category
@@ -127,11 +122,9 @@ class Product
         return $this->category;
     }
 
-    public function setCategory(?Category $category): static
+    public function setCategory(?Category $category): void
     {
         $this->category = $category;
-
-        return $this;
     }
 
     public function getPrice(): int
@@ -139,11 +132,9 @@ class Product
         return $this->price;
     }
 
-    public function setPrice(int $price): static
+    public function setPrice(int $price): void
     {
         $this->price = $price;
-
-        return $this;
     }
 
     public function getImageUrl(): ?string
@@ -151,11 +142,9 @@ class Product
         return $this->imageUrl;
     }
 
-    public function setImageUrl(?string $imageUrl): static
+    public function setImageUrl(?string $imageUrl): void
     {
         $this->imageUrl = $imageUrl;
-
-        return $this;
     }
 
     public function getDescription(): ?string
@@ -163,34 +152,28 @@ class Product
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
-
-        return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 } 

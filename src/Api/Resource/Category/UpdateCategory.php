@@ -13,13 +13,14 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Api\State\Category\UpdateCategoryProcessor;
 use App\Entity\Category;
+use App\Entity\CategoryStatus;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Patch(
-    uriTemplate: '/categorys/{id}.{_format}',
+    uriTemplate: '/categories/{id}.{_format}',
     openapi: new Operation(
         tags: ['Category'],
     ),
@@ -38,15 +39,17 @@ final readonly class UpdateCategory
         #[ApiProperty(openapiContext: ['example' => 'd36f7f32-9f20-7e7a-9014-5b79e2bc5671'])]
         public string|UuidV7 $id,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[Assert\Length(min: 2, max: 255)]
+        #[ApiProperty(openapiContext: ['example' => 'Coffee'])]
         public ?string $name = null,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[Assert\Length(max: 500)]
+        #[ApiProperty(openapiContext: ['example' => 'All types of coffee products'])]
         public ?string $description = null,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[Assert\Choice(choices: ['active', 'inactive'])]
+        #[ApiProperty(openapiContext: ['example' => 'active'])]
         public ?string $status = null,
-
     ) {
     }
 }

@@ -63,7 +63,7 @@ final readonly class UpdateShop
         #[ApiProperty(openapiContext: ['example' => 'https://example.com/avatar.jpg'])]
         public ?string $avatarUrl = null,
 
-        #[Assert\Choice(callback: [ShopStatus::class, 'values'])]
+        #[Assert\Choice(choices: ['active', 'inactive', 'suspended'])]
         #[ApiProperty(openapiContext: ['example' => 'active'])]
         public ?string $status = null,
     ) {

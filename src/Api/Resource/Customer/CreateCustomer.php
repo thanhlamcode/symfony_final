@@ -54,14 +54,14 @@ final readonly class CreateCustomer
         #[ApiProperty(openapiContext: ['example' => '+1234567890'])]
         public ?string $phone = null,
 
-        #[Assert\Choice(callback: [Gender::class, 'values'])]
+        #[Assert\Choice(choices: ['male', 'female', 'other'])]
         #[ApiProperty(openapiContext: ['example' => 'male'])]
         public ?string $gender = null,
 
         #[ApiProperty(openapiContext: ['example' => '1990-01-01'])]
         public ?\DateTimeInterface $birthday = null,
 
-        #[Assert\Choice(callback: [CustomerStatus::class, 'values'])]
+        #[Assert\Choice(choices: ['active', 'inactive', 'suspended'])]
         #[ApiProperty(openapiContext: ['example' => 'active'])]
         public string $status = 'active',
 

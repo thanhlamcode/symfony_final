@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Api\Resource\Category\CreateCategory;
 use App\Entity\Category;
+use App\Entity\CategoryStatus;
 use Doctrine\ORM\EntityManagerInterface;
 
 /** @implements ProcessorInterface<CreateCategory> */
@@ -24,14 +25,16 @@ class CreateCategoryProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Category
     {
-        $entity = new Category();
+        $category = new Category();
 
-        // Set properties here
-        $entity->setId($data->id);
+        $category->setId($data->id);
+        $category->setName($data->name);
+        $category->setDescription($data->description);
+        $category->setStatus(CategoryStatus::from($data->status));
 
-        $this->entityManager->persist($entity);
+        $this->entityManager->persist($category);
         $this->entityManager->flush();
 
-        return $entity;
+        return $category;
     }
 }

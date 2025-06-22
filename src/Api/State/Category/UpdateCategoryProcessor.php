@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Api\Resource\Category\UpdateCategory;
 use App\Entity\Category;
+use App\Entity\CategoryStatus;
 use Doctrine\ORM\EntityManagerInterface;
 
 /** @implements ProcessorInterface<UpdateCategory> */
@@ -24,16 +25,26 @@ class UpdateCategoryProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Category
     {
-        $entity = $this->entityManager->find(Category::class, $data->id);
+        $category = $this->entityManager->find(Category::class, $data->id);
         
-        if (!$entity) {
+        if (!$category) {
             throw new \InvalidArgumentException('Category not found');
         }
 
-        // Update properties here
+        if ($data->name !== null) {
+            $category->setName($data->name);
+        }
+        
+        if ($data->description !== null) {
+            $category->setDescription($data->description);
+        }
+        
+        if ($data->status !== null) {
+            $category->setStatus(CategoryStatus::from($data->status));
+        }
 
         $this->entityManager->flush();
 
-        return $entity;
+        return $category;
     }
 }

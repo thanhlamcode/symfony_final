@@ -12,7 +12,10 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Api\State\Staff\CreateStaffProcessor;
+use App\Entity\Gender;
+use App\Entity\Shop;
 use App\Entity\Staff;
+use App\Entity\StaffStatus;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\Uid\UuidV7;
@@ -40,25 +43,35 @@ final readonly class CreateStaff
 
         #[Assert\NotBlank]
         #[Assert\Length(min: 2, max: 255)]
-        #[ApiProperty(openapiContext: ['example' => 'John Doe'])]
+        #[ApiProperty(openapiContext: ['example' => 'Jane Smith'])]
         public string $name,
 
         #[Assert\NotBlank]
         #[Assert\Email]
-        #[ApiProperty(openapiContext: ['example' => 'john.doe@example.com'])]
+        #[ApiProperty(openapiContext: ['example' => 'jane.smith@example.com'])]
         public string $email,
 
-        #[Assert\Length(min: 10, max: 20)]
-        #[ApiProperty(openapiContext: ['example' => '+1234567890'])]
-        public ?string $phone = null,
-
         #[Assert\NotBlank]
-        #[Assert\Length(max: 100)]
-        #[ApiProperty(openapiContext: ['example' => 'Barista'])]
-        public string $position,
+        #[Assert\Length(min: 10, max: 255)]
+        #[ApiProperty(openapiContext: ['example' => '+1234567890'])]
+        public string $phone,
 
-        #[ApiProperty(openapiContext: ['example' => true])]
-        public bool $isActive = true,
+        #[Assert\Choice(choices: ['male', 'female', 'other'])]
+        #[ApiProperty(openapiContext: ['example' => 'female'])]
+        public ?string $gender = null,
+
+        #[ApiProperty(openapiContext: ['example' => '1990-01-01'])]
+        public ?\DateTimeInterface $birthday = null,
+
+        #[Assert\Choice(choices: ['active', 'inactive', 'suspended'])]
+        #[ApiProperty(openapiContext: ['example' => 'active'])]
+        public string $status = 'active',
+
+        #[ApiProperty(openapiContext: ['example' => '123 Main Street'])]
+        public ?string $address = null,
+
+        #[ApiProperty(openapiContext: ['example' => '/shops/1'])]
+        public ?Shop $shop = null,
     ) {
     }
 } 

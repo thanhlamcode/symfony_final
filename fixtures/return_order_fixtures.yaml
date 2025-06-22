@@ -1,6 +1,6 @@
 App\Entity\ReturnOrder:
     return_order_{1..100}:
-        order: "@order_<numberBetween(1, 1000)>"
+        order: "@order_<current()>"
         status: <returnOrderStatus()>
         reason: <randomElement(['Wrong item', 'Damaged', 'Not as described', 'Size issue', 'Quality problem', 'Changed mind', 'Duplicate order', 'Late delivery', 'Missing items', 'Expired product'])>
         refundAmount: <numberBetween(1000, 50000)>

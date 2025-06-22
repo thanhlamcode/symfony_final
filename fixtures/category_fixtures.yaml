@@ -1,0 +1,8 @@
+App\Entity\Category:
+    category_{1..20}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        name: <randomElement(['Coffee', 'Tea', 'Pastries', 'Sandwiches', 'Salads', 'Soups', 'Desserts', 'Beverages', 'Snacks', 'Breakfast', 'Lunch', 'Dinner', 'Appetizers', 'Main Course', 'Side Dishes', 'Drinks', 'Alcoholic Beverages', 'Non-Alcoholic', 'Hot Drinks', 'Cold Drinks'])>
+        description: <sentence()>
+        status: <randomElement(['active', 'inactive'])>
+        createdAt: <dateTimeBetween('-1 year', '-1 month')>
+        updatedAt: <dateTimeBetween('-1 month', 'now')>

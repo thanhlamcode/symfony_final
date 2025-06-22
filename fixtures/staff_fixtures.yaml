@@ -1,0 +1,10 @@
+App\Entity\Staff:
+    staff_{1..200}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        name: "<firstName()> <lastName()>"
+        email (unique): "<safeEmail()>"
+        phone: '<(Brick\PhoneNumber\PhoneNumber::parse("+1" . mt_rand(1000000000, 9999999999)))>'
+        position: <randomElement(['Manager', 'Barista', 'Cashier', 'Kitchen Staff', 'Server', 'Supervisor', 'Assistant Manager'])>
+        isActive: <boolean()>
+        createdAt: <dateTimeBetween('-1 year', '-1 month')>
+        updatedAt: <dateTimeBetween('-1 month', 'now')>

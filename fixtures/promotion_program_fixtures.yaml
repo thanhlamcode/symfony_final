@@ -1,0 +1,10 @@
+App\Entity\PromotionProgram:
+    promotionProgram_{1..20}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        name: <randomElement(['Summer Sale', 'Winter Promotion', 'Holiday Special', 'Back to School', 'Black Friday', 'Cyber Monday', 'New Year Sale', 'Valentine Special', 'Easter Promotion', 'Mother Day', 'Father Day', 'Independence Day', 'Labor Day', 'Thanksgiving', 'Christmas Sale', 'End of Year', 'Spring Collection', 'Autumn Special', 'Weekend Deals', 'Midweek Madness'])> <numberBetween(1, 999)>
+        description: <paragraph()>
+        startDate: <dateTimeBetween('-6 months', '+1 month')>
+        endDate: <dateTimeBetween('+1 month', '+6 months')>
+        status: <randomElement(['active', 'inactive', 'scheduled', 'expired'])>
+        createdAt: <dateTimeBetween('-1 year', '-1 month')>
+        updatedAt: <dateTimeBetween('-1 month', 'now')>

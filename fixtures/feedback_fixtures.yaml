@@ -1,0 +1,29 @@
+App\Entity\OrderFeedback:
+    order_feedback_{1..800}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        order: "@order_<numberBetween(1, 1000)>"
+        customer: "@customer_<numberBetween(1, 500)>"
+        rating: <numberBetween(1, 5)>
+        comment: <optional(<paragraph()>)>
+        createdAt: <dateTimeBetween('-1 year', '-1 day')>
+        updatedAt: <dateTimeBetween('-1 day', 'now')>
+
+App\Entity\ShopFeedback:
+    shop_feedback_{1..600}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        shop: "@shop_<numberBetween(1, 50)>"
+        customer: "@customer_<numberBetween(1, 500)>"
+        rating: <numberBetween(1, 5)>
+        comment: <optional(<paragraph()>)>
+        createdAt: <dateTimeBetween('-1 year', '-1 day')>
+        updatedAt: <dateTimeBetween('-1 day', 'now')>
+
+App\Entity\StaffFeedback:
+    staff_feedback_{1..400}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        staff: "@staff_<numberBetween(1, 200)>"
+        customer: "@customer_<numberBetween(1, 500)>"
+        rating: <numberBetween(1, 5)>
+        comment: <optional(<paragraph()>)>
+        createdAt: <dateTimeBetween('-1 year', '-1 day')>
+        updatedAt: <dateTimeBetween('-1 day', 'now')>

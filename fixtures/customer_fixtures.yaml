@@ -1,0 +1,13 @@
+App\Entity\Customer:
+    customer_{1..500}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        name: "<firstName()> <lastName()>"
+        phone: '<(Brick\PhoneNumber\PhoneNumber::parse("+1" . mt_rand(1000000000, 9999999999)))>'
+        email (unique): "<safeEmail()>"
+        gender: <randomElement(['male', 'female', 'other'])>
+        birthday: <dateTimeBetween('-60 years', '-18 years')>
+        status: <randomElement(['active', 'inactive', 'banned'])>
+        address: "<address()>"
+        memberShipLevel: "@memberShipLevel_<numberBetween(1, 5)>"
+        createdAt: <dateTimeBetween('-2 years', '-1 month')>
+        updatedAt: <dateTimeBetween('-1 month', 'now')>

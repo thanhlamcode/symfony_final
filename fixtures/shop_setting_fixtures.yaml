@@ -1,0 +1,9 @@
+App\Entity\ShopSetting:
+    shop_setting_{1..50}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        shop: "@shop_<numberBetween(1, 50)>"
+        settingKey: <randomElement(['opening_hours', 'delivery_radius', 'minimum_order', 'delivery_fee', 'tax_rate', 'currency', 'language', 'timezone', 'notification_email', 'support_phone', 'social_media', 'payment_methods', 'loyalty_program', 'auto_accept_orders', 'max_order_value', 'delivery_time', 'pickup_available', 'dine_in_available', 'reservation_required', 'special_offers'])>
+        settingValue: <randomElement(['09:00-22:00', '5km', '10000', '2000', '10%', 'USD', 'en', 'America/New_York', 'support@shop.com', '+1234567890', 'facebook,instagram', 'cash,card', 'enabled', 'true', '100000', '30min', 'true', 'true', 'false', 'enabled'])>
+        description: <sentence()>
+        createdAt: <dateTimeBetween('-1 year', '-1 month')>
+        updatedAt: <dateTimeBetween('-1 month', 'now')>

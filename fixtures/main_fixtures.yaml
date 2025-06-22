@@ -1,0 +1,21 @@
+# Main Fixtures File - Load in this order to handle dependencies
+# 1. First load entities without dependencies
+# 2. Then load entities with relationships
+
+# Load all fixtures
+imports:
+    - { resource: "membership_level_fixtures.yaml" }
+    - { resource: "category_fixtures.yaml" }
+    - { resource: "promotion_program_fixtures.yaml" }
+    - { resource: "shop_fixtures.yaml" }
+    - { resource: "staff_fixtures.yaml" }
+    - { resource: "customer_fixtures.yaml" }
+    - { resource: "product_fixtures.yaml" }
+    - { resource: "coupon_fixtures.yaml" }
+    - { resource: "order_fixtures.yaml" }
+    - { resource: "order_item_fixtures.yaml" }
+    - { resource: "coupon_order_fixtures.yaml" }
+    - { resource: "customer_point_transaction_fixtures.yaml" }
+    - { resource: "feedback_fixtures.yaml" }
+    - { resource: "return_order_fixtures.yaml" }
+    - { resource: "shop_setting_fixtures.yaml" }

@@ -1,0 +1,11 @@
+App\Entity\OrderItem:
+    order_item_{1..3000}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        order: "@order_<numberBetween(1, 1000)>"
+        product: "@product_<numberBetween(1, 300)>"
+        quantity: <numberBetween(1, 10)>
+        unitPrice: <numberBetween(500, 50000)>
+        totalPrice: <numberBetween(500, 50000)>
+        note: <optional(<sentence()>)>
+        createdAt: <dateTimeBetween('-1 year', '-1 day')>
+        updatedAt: <dateTimeBetween('-1 day', 'now')>

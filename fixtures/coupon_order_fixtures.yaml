@@ -1,0 +1,8 @@
+App\Entity\CouponOrder:
+    coupon_order_{1..500}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        order: "@order_<numberBetween(1, 1000)>"
+        coupon: "@coupon_<numberBetween(1, 100)>"
+        discountAmount: <numberBetween(100, 10000)>
+        createdAt: <dateTimeBetween('-1 year', '-1 day')>
+        updatedAt: <dateTimeBetween('-1 day', 'now')>

@@ -1,0 +1,11 @@
+App\Entity\ReturnOrder:
+    return_order_{1..100}:
+        id: '<(Symfony\Component\Uid\Uuid::v7())>'
+        order: "@order_<numberBetween(1, 1000)>"
+        customer: "@customer_<numberBetween(1, 500)>"
+        reason: <randomElement(['Wrong item', 'Damaged', 'Not as described', 'Size issue', 'Quality problem', 'Changed mind', 'Duplicate order', 'Late delivery', 'Missing items', 'Expired product'])>
+        status: <randomElement(['pending', 'approved', 'rejected', 'completed'])>
+        refundAmount: <numberBetween(1000, 50000)>
+        note: <optional(<paragraph()>)>
+        createdAt: <dateTimeBetween('-6 months', '-1 day')>
+        updatedAt: <dateTimeBetween('-1 day', 'now')>

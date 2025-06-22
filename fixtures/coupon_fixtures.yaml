@@ -11,3 +11,4 @@ App\Entity\Coupon:
         minOrderValue: <numberBetween(1000, 20000)>
         createdAt: <dateTimeBetween('-6 months', '-1 month')>
         updatedAt: <dateTimeBetween('-1 month', 'now')>
+        phone: '<(Brick\PhoneNumber\PhoneNumber::parse("+1" . mt_rand(1000000000, 9999999999)))>'

@@ -18,7 +18,6 @@ App\Entity\ShopFeedback:
 App\Entity\StaffFeedback:
     staff_feedback_{1..400}:
         staff: "@staff_<numberBetween(1, 200)>"
-        customer: "@customer_<numberBetween(1, 500)>"
         rating: <ratingValue()>
         comment: <paragraph()>
         createdAt: <dateTimeBetween('-1 year', '-1 day')>

@@ -1,6 +1,6 @@
 App\Entity\ShopSetting:
     shop_setting_{1..50}:
-        shop: "@shop_<numberBetween(1, 50)>"
+        shop: "@shop_<current()>"
         openTime: <dateTimeBetween('06:00', '10:00')>
         closeTime: <dateTimeBetween('20:00', '23:00')>
         workingDays: <workingDays()>

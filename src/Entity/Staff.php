@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -38,6 +39,28 @@ use Doctrine\DBAL\Types\Types;
             normalizationContext: ['groups' => ['api:staff:get_collection', 'api:staff']]
         ),
         new Delete()
+    ]
+)]
+#[ApiFilter(
+    filterClass: SearchFilter::class,
+    properties: [
+        'name' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'email' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'phone' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'address' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'status' => SearchFilterInterface::STRATEGY_EXACT,
+        'gender' => SearchFilterInterface::STRATEGY_EXACT,
+        'shop.name' => SearchFilterInterface::STRATEGY_PARTIAL
+    ]
+)]
+#[ApiFilter(
+    filterClass: OrderFilter::class,
+    properties: [
+        'name' => 'ASC',
+        'email' => 'ASC',
+        'createdAt' => 'DESC',
+        'updatedAt' => 'DESC',
+        'birthday' => 'ASC'
     ]
 )]
 #[ORM\Entity]

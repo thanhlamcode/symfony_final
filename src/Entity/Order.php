@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +18,26 @@ use Symfony\Component\Uid\UuidV7;
 #[ApiResource(
     normalizationContext: ['groups' => ['order:read']],
     denormalizationContext: ['groups' => ['order:write']]
+)]
+#[ApiFilter(
+    filterClass: SearchFilter::class,
+    properties: [
+        'customer.name' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'customer.email' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'shop.name' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'staff.name' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'paymentMethod' => SearchFilterInterface::STRATEGY_EXACT,
+        'note' => SearchFilterInterface::STRATEGY_PARTIAL
+    ]
+)]
+#[ApiFilter(
+    filterClass: OrderFilter::class,
+    properties: [
+        'total' => 'ASC',
+        'subTotal' => 'ASC',
+        'createdAt' => 'DESC',
+        'updatedAt' => 'DESC'
+    ]
 )]
 #[ORM\Entity]
 #[ORM\Table(name: '`order`')]

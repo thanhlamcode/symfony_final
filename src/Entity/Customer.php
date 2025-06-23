@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -49,8 +50,21 @@ use App\Entity\Gender;
     properties: [
         'name' => SearchFilterInterface::STRATEGY_PARTIAL,
         'email' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'phone' => SearchFilterInterface::STRATEGY_PARTIAL,
         'status' => SearchFilterInterface::STRATEGY_EXACT,
-        'gender' => SearchFilterInterface::STRATEGY_EXACT
+        'gender' => SearchFilterInterface::STRATEGY_EXACT,
+        'address' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'memberShipLevel.name' => SearchFilterInterface::STRATEGY_PARTIAL
+    ]
+)]
+#[ApiFilter(
+    filterClass: OrderFilter::class,
+    properties: [
+        'name' => 'ASC',
+        'email' => 'ASC',
+        'createdAt' => 'DESC',
+        'updatedAt' => 'DESC',
+        'birthday' => 'ASC'
     ]
 )]
 #[ORM\Entity]

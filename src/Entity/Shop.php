@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -44,8 +45,19 @@ use App\Service\UuidGenerator;
     properties: [
         'name' => SearchFilterInterface::STRATEGY_PARTIAL,
         'email' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'phone' => SearchFilterInterface::STRATEGY_PARTIAL,
+        'address' => SearchFilterInterface::STRATEGY_PARTIAL,
         'status' => SearchFilterInterface::STRATEGY_EXACT,
         'shopCode' => SearchFilterInterface::STRATEGY_EXACT
+    ]
+)]
+#[ApiFilter(
+    filterClass: OrderFilter::class,
+    properties: [
+        'name' => 'ASC',
+        'shopCode' => 'ASC',
+        'createdAt' => 'DESC',
+        'updatedAt' => 'DESC'
     ]
 )]
 #[ORM\Entity]

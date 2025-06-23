@@ -17,7 +17,8 @@ use Symfony\Component\Uid\UuidV7;
 class ShopFeedback
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['shop_feedback:read'])]
     private UuidV7 $id;
@@ -130,4 +131,4 @@ class ShopFeedback
 
         return $this;
     }
-} 
+}

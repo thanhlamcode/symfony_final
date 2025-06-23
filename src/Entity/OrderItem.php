@@ -16,6 +16,8 @@ use Symfony\Component\Uid\UuidV7;
 class OrderItem
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['order_item:read'])]
     private UuidV7 $id;
@@ -161,4 +163,4 @@ class OrderItem
 
         return $this;
     }
-} 
+}

@@ -44,7 +44,8 @@ use Symfony\Component\Uid\UuidV7;
 class Order
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['order:read'])]
     private UuidV7 $id;
@@ -96,11 +97,6 @@ class Order
 
     #[ORM\OneToOne(mappedBy: 'order', cascade: ['persist', 'remove'])]
     private ?ReturnOrder $returnOrder = null;
-
-    public function __construct()
-    {
-        $this->status = ReturnStatus::PENDING;
-    }
 
     public function getId(): UuidV7
     {
@@ -248,4 +244,4 @@ class Order
 
         return $this;
     }
-} 
+}

@@ -49,11 +49,6 @@ class ReturnOrder
     #[Groups(['return_order:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    public function __construct()
-    {
-        $this->status = ReturnOrderStatus::PENDING;
-    }
-
     public function getId(): UuidV7
     {
         return $this->id;
@@ -130,4 +125,4 @@ class ReturnOrder
 
         return $this;
     }
-} 
+}

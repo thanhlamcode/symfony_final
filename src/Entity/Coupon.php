@@ -16,10 +16,11 @@ use Symfony\Component\Uid\UuidV7;
 class Coupon
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['coupon:read'])]
-    private UuidV7 $id;
+    private ?UuidV7 $id = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['coupon:read', 'coupon:write'])]
@@ -69,9 +70,14 @@ class Coupon
         $this->status = CouponStatus::ACTIVE;
     }
 
-    public function getId(): UuidV7
+    public function getId(): ?UuidV7
     {
         return $this->id;
+    }
+
+    public function setId(?UuidV7 $id): void
+    {
+        $this->id = $id;
     }
 
     public function getName(): string

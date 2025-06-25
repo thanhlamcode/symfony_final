@@ -17,10 +17,11 @@ use Symfony\Component\Uid\UuidV7;
 class ReturnOrder
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['return_order:read'])]
-    private UuidV7 $id;
+    #[Groups(['return_order:read', 'return_order:write'])]
+    private ?UuidV7 $id = null;
 
     #[ORM\OneToOne(inversedBy: 'returnOrder')]
     #[ORM\JoinColumn(nullable: false)]
@@ -49,9 +50,14 @@ class ReturnOrder
     #[Groups(['return_order:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    public function getId(): UuidV7
+    public function getId(): ?UuidV7
     {
         return $this->id;
+    }
+
+    public function setId(?UuidV7 $id): void
+    {
+        $this->id = $id;
     }
 
     public function getOrder(): ?Order

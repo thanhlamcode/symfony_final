@@ -39,28 +39,31 @@ final readonly class UpdateCoupon
         #[ApiProperty(openapiContext: ['example' => 'd36f7f32-9f20-7e7a-9014-5b79e2bc5671'])]
         public string|UuidV7 $id,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[ApiProperty(openapiContext: ['example' => 'Summer Sale Coupon'])]
         public ?string $name = null,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[ApiProperty(openapiContext: ['example' => 'SUMMER2024'])]
         public ?string $code = null,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[ApiProperty(openapiContext: ['example' => 'd36f7f32-9f20-7e7a-9014-5b79e2bc5671'])]
         public ?string $promotionProgram = null,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[ApiProperty(openapiContext: ['example' => 'PERCENTAGE'])]
         public ?string $discountType = null,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[Assert\Positive]
+        #[ApiProperty(openapiContext: ['example' => '10.5'])]
         public ?string $value = null,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[Assert\Positive]
+        #[ApiProperty(openapiContext: ['example' => '100'])]
         public ?string $quantity = null,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[ApiProperty(openapiContext: ['example' => 'ACTIVE'])]
         public ?string $status = null,
 
-        #[ApiProperty(openapiContext: ['example' => 'example'])]
+        #[Assert\PositiveOrZero]
+        #[ApiProperty(openapiContext: ['example' => '50.0'])]
         public ?string $minOrderValue = null,
 
     ) {

@@ -7,3 +7,9 @@ api_platform:
             vary: ["Content-Type", "Authorization", "Origin"]
     mapping:
         paths: ["%kernel.project_dir%/src"]
+
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header

@@ -3,12 +3,41 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\UuidV7;
 
 #[ApiResource(
+    operations: [
+        new Get(
+            uriTemplate: '/coupons/{id}.{_format}',
+            requirements: [
+                'id' => Requirement::UUID_V7,
+            ],
+            openapi: new Operation(
+                tags: ['Coupon']
+            ),
+            normalizationContext: ['groups' => ['coupon:read']],
+            security: "is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')"
+        ),
+        new GetCollection(
+            uriTemplate: '/coupons.{_format}',
+            openapi: new Operation(
+                tags: ['Coupon']
+            ),
+            normalizationContext: ['groups' => ['coupon:read']],
+            security: "is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')"
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN')"
+        )
+    ],
     normalizationContext: ['groups' => ['coupon:read']],
     denormalizationContext: ['groups' => ['coupon:write']]
 )]

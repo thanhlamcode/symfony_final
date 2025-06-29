@@ -28,7 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         ORMException::class => 422
     ],
     output: Coupon::class,
-    processor: UpdateCouponProcessor::class
+    processor: UpdateCouponProcessor::class,
+    security: "is_granted('ROLE_ADMIN')"
 )]
 final readonly class UpdateCoupon
 {

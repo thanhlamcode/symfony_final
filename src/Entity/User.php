@@ -9,22 +9,23 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
-    security: "is_granted('ROLE_ADMIN')"
+//    security: "is_granted('ROLE_ADMIN')"
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['user:read'])]
-    private ?Uuid $id = null;
+    private ?UuidV7 $id = null;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\NotBlank]
@@ -44,15 +45,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:write'])]
     private string $password;
 
-    public function getId(): ?Uuid
+    public function getId(): ?UuidV7
     {
         return $this->id;
-    }
-
-    public function setId(Uuid $id): self
-    {
-        $this->id = $id;
-        return $this;
     }
 
     public function getEmail(): string

@@ -38,9 +38,9 @@ final readonly class Login
         public string $email,
 
         #[Assert\NotBlank]
-        #[Assert\Length(min: 20)]
+        #[Assert\Length(min: 3)]
         #[ApiProperty(openapiContext: ['example' => 'password123'])]
         public string $password,
     ) {
     }
-} 
+}

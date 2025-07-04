@@ -14,7 +14,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Cài thư viện PHP (không chạy auto-scripts để tránh lỗi symfony-cmd)
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --no-dev --optimize-autoloader
 
 EXPOSE 8000
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]

@@ -1,30 +1,28 @@
+version: "3.8"
+
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:16-alpine
-    container_name: symfony_postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: ueh_final
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
-    ports:
-      - "5432:5432"
+  php:
+    build:
+      context: ./docker/php
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - symfony_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d ueh_final"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - ./api:/var/www/html
+    environment:
+      - APP_ENV=prod
+
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./api:/var/www/html
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - php
 
 volumes:
-  postgres_data:
-    driver: local
-
-networks:
-  symfony_network:
-    driver: bridge 
+  db_data:
+  caddy_data:
+  caddy_config:

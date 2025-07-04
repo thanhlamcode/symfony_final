@@ -9,5 +9,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
+# Cài thư viện PHP (fix lỗi thiếu autoload_runtime.php)
+RUN composer install --no-dev --optimize-autoloader
+
 EXPOSE 8000
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]

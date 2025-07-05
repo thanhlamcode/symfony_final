@@ -17,3 +17,6 @@
 .env.*
 !env.example
 
+/public/uploads/files/
+
+

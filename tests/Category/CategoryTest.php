@@ -1,0 +1,125 @@
+<?php
+
+namespace App\Tests\Category;
+
+use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use Symfony\Component\HttpFoundation\Response;
+
+class CategoryTest extends ApiTestCase
+{
+    private $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+        $this->client->disableReboot(); // giữ state DB giữa các request
+    }
+
+    private function createCategory(array $data = []): array
+    {
+        $response = $this->client->request('POST', '/api/categories', [
+            'headers' => [
+                'Accept' => 'application/ld+json',
+                'Content-Type' => 'application/ld+json',
+            ],
+            'json' => array_merge([
+                'name' => 'Coffee',
+                'description' => 'All types of coffee products',
+                'status' => 'active',
+            ], $data),
+        ]);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+
+        return $response->toArray();
+    }
+
+    public function testCreateCategory(): void
+    {
+        $data = $this->createCategory();
+
+        $this->assertArrayHasKey('id', $data);
+        $this->assertSame('Coffee', $data['name']);
+        $this->assertSame('active', $data['status']);
+    }
+
+    public function testGetCategory(): void
+    {
+        $category = $this->createCategory();
+
+        $this->client->request('GET', $category['@id'], [
+            'headers' => ['Accept' => 'application/ld+json'],
+        ]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            'name' => 'Coffee',
+            'description' => 'All types of coffee products',
+            'status' => 'active',
+        ]);
+    }
+
+    public function testGetCategoryCollection(): void
+    {
+        $this->createCategory(['name' => 'Espresso']);
+        $this->createCategory(['name' => 'Latte']);
+
+        $this->client->request('GET', '/api/categories', [
+            'headers' => ['Accept' => 'application/ld+json'],
+        ]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@type' => 'Collection',
+        ]);
+    }
+
+    public function testUpdateCategory(): void
+    {
+        $category = $this->createCategory();
+
+        $this->client->request('PATCH', $category['@id'], [
+            'headers' => [
+                'Content-Type' => 'application/merge-patch+json',
+                'Accept' => 'application/ld+json',
+            ],
+            'json' => ['description' => 'Updated desc'],
+        ]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains(['description' => 'Updated desc']);
+    }
+
+    public function testDeleteCategory(): void
+    {
+        $category = $this->createCategory();
+
+        $this->client->request('DELETE', $category['@id'], [
+            'headers' => ['Accept' => 'application/ld+json'],
+        ]);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+
+        $this->client->request('GET', $category['@id'], [
+            'headers' => ['Accept' => 'application/ld+json'],
+        ]);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
+
+    public function testInvalidStatusThrows422(): void
+    {
+        $this->client->request('POST', '/api/categories', [
+            'headers' => [
+                'Accept' => 'application/ld+json',
+                'Content-Type' => 'application/ld+json',
+            ],
+            'json' => [
+                'name' => 'Invalid',
+                'status' => 'deleted',
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+    }
+}

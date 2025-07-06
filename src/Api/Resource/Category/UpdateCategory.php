@@ -27,6 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         UniqueConstraintViolationException::class => 422,
         ORMException::class => 422
     ],
+    input: UpdateCategory::class,
     output: Category::class,
     processor: UpdateCategoryProcessor::class
 )]

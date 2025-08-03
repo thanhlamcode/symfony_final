@@ -28,18 +28,17 @@ class CreateCustomerProcessor implements ProcessorInterface
     {
         $customer = new Customer();
 
-        $customer->setId($data->id);
         $customer->setName($data->name);
         $customer->setEmail($data->email);
         $customer->setPhone($data->phone);
         $customer->setBirthday($data->birthday);
         $customer->setAddress($data->address);
         $customer->setMemberShipLevel($data->memberShipLevel);
-        
+
         if ($data->gender !== null) {
             $customer->setGender(Gender::from($data->gender));
         }
-        
+
         $customer->setStatus(CustomerStatus::from($data->status));
 
         $this->entityManager->persist($customer);
@@ -47,4 +46,4 @@ class CreateCustomerProcessor implements ProcessorInterface
 
         return $customer;
     }
-} 
+}

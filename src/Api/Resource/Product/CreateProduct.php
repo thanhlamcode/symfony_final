@@ -45,7 +45,7 @@ final readonly class CreateProduct
         public int $price,
 
         #[Assert\NotBlank]
-        #[ApiProperty(openapiContext: ['example' => '/categories/1'])]
+        #[ApiProperty(openapiContext: ['example' => '/api/categories/01986f63-9209-7928-87e0-fb39b0487490'])]
         public Category $category,
 
         #[Assert\Length(max: 1000)]

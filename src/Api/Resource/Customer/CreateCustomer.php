@@ -62,8 +62,8 @@ final readonly class CreateCustomer
         #[ApiProperty(openapiContext: ['example' => '123 Main Street'])]
         public ?string $address = null,
 
-        #[ApiProperty(openapiContext: ['example' => '/member_ship_levels/1'])]
+        #[ApiProperty(openapiContext: ['example' => '/api/member_ship_levels/01986f63-91cd-7909-8f16-82ae47a93219'])]
         public ?MemberShipLevel $memberShipLevel = null,
     ) {
     }
-} 
+}

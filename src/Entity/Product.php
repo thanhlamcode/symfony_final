@@ -55,15 +55,15 @@ use Symfony\Component\Uid\UuidV7;
         'category.name' => SearchFilterInterface::STRATEGY_PARTIAL
     ]
 )]
-#[ApiFilter(
-    filterClass: OrderFilter::class,
-    properties: [
-        'name' => 'ASC',
-        'price' => 'ASC',
-        'createdAt' => 'DESC',
-        'updatedAt' => 'DESC'
-    ]
-)]
+//#[ApiFilter(
+//    filterClass: OrderFilter::class,
+//    properties: [
+//        'name',
+//        'price',
+//        'createdAt',
+//        'updatedAt'
+//    ]
+//)]
 #[ORM\Entity]
 class Product
 {
@@ -198,4 +198,4 @@ class Product
     {
         $this->updatedAt = $updatedAt;
     }
-} 
+}

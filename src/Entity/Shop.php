@@ -67,45 +67,45 @@ class Shop
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private ?UuidV7 $id = null;
 
     #[ORM\Column]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private int $shopCode;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private string $name;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private string $address;
 
     #[ORM\Column(length: 180)]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private string $email;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private string $phone;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private ?string $avatarUrl = null;
 
     #[ORM\Column(enumType: ShopStatus::class)]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private ShopStatus $status;
 
     #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'create')]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'update')]
-    #[Groups(['api:shop:read'])]
+    #[Groups(['api:shop'])]
     private \DateTimeInterface $updatedAt;
 
     #[ORM\OneToOne(mappedBy: 'shop', cascade: ['persist', 'remove'])]

@@ -8,10 +8,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\UuidV7;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['shop_feedback:read']],
     denormalizationContext: ['groups' => ['shop_feedback:write']]
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'shop' => 'exact'
+    ]
 )]
 #[ORM\Entity]
 class ShopFeedback

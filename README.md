@@ -1,42 +1,42 @@
 # Symfony Final Project
 
-## 📄 Giới thiệu / Introduction
+## 📄 Introduction
 
-Hệ thống API xây dựng bằng Symfony 8 + API Platform, hỗ trợ chức năng CRUD cho các entity như Product, Order, Customer, Coupon, Staff, ...
+This API system is built with **Symfony 8** and **API Platform**, providing full CRUD capabilities for entities such as **Product**, **Order**, **Customer**, **Coupon**, **Staff**, and more.
 
-This API system is built using Symfony 8 + API Platform, supporting CRUD operations for entities such as Product, Order, Customer, Coupon, Staff, and more.
+Visit my api here: [https://symfony-final.onrender.com/api/docs](https://symfony-final.onrender.com/api/docs)
 
 ---
 
-## ⚙️ Cài đặt & Triển khai / Setup & Deployment
+## ⚙️ Setup & Deployment
 
-### Yêu cầu / Requirements
+### Requirements
 
-- PHP 8.3 + Composer
-- Docker & Docker Compose
-- PostgreSQL (hoặc DB khác tùy chọn)
-- Symfony CLI (tùy chọn)
+* **PHP 8.3** with **Composer**
+* **Docker** & **Docker Compose**
+* **PostgreSQL** (or any database you prefer)
+* **Symfony CLI** (optional)
 
-### Dùng Docker
+### Using Docker
 
 ```bash
-# Xây dựng và chạy container
+# Build and start the containers
 docker-compose up -d --build
 
-# Truy cập container
+# Enter the PHP container
 docker exec -it <container_name> bash
 
-# Cài package PHP
+# Install PHP dependencies
 composer install
 
-# Tạo DB + migrate
+# Create the database and run migrations
 php bin/console doctrine:migrations:migrate
 
-# Chạy server Symfony
+# Start the Symfony server
 php -S 0.0.0.0:8000 -t public
 ```
 
-### Dùng local (không Docker)
+### Local Setup (without Docker)
 
 ```bash
 git clone https://github.com/thanhlamcode/symfony_final.git
@@ -73,40 +73,44 @@ EXPOSE 8000
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
 ```
 
-Giải thích:
-- Image gốc là PHP 8.3-FPM
-- Cho phép composer chạy dưới quyền root
-- Cài đặt các package và extension cần thiết cho Symfony
-- Cài Symfony CLI
-- Copy composer binary từ image composer:2
-- Sao chép mã nguồn và cài package
-- Chạy server PHP tại cổng 8000
+**Explanation:**
+
+* Starts from the **PHP 8.3‑FPM** base image.
+* Allows Composer to run as root inside the container.
+* Installs all required OS packages and PHP extensions for Symfony.
+* Installs the **Symfony CLI** for local tooling.
+* Copies the Composer binary from the official `composer:2` image.
+* Copies the project source code and installs PHP dependencies.
+* Exposes port **8000** and launches the built‑in PHP server.
 
 ---
 
 ## 📃 API Usage
 
-- Swagger UI: `http://localhost:8000/api/docs`
-- CRUD cơ bản cho các entity: Product, Order, Customer, Staff, Coupon
-- Hỗ trợ: filtering, pagination, serialization groups, validation
-- File upload: `POST /api/uploaded_files`
-- Authentication: JWT (đã thiết lập route "/auth/login", "/auth/register")
-- Mail async: Symfony Messenger
+* **Swagger UI (local):** `http://localhost:8000/api/docs`
+* **Swagger UI (production):** `https://symfony-final.onrender.com/api/docs`
+* Basic CRUD endpoints for **Product**, **Order**, **Customer**, **Staff**, **Coupon**.
+* Built‑in **filtering, pagination, serialization groups, and validation**.
+* **File upload:** `POST /api/uploaded_files`
+* **Authentication:** JSON Web Tokens (`/auth/login`, `/auth/register`).
+* **Asynchronous email** handling via **Symfony Messenger**.
 
 ---
 
 ## 📊 Technologies Used
 
-- **Framework**: Symfony 8
-- **API Platform**: RESTful endpoint scaffolding
-- **ORM**: Doctrine ORM + Migrations
-- **Database**: PostgreSQL (mặc định), SQLite hỗ trợ dev
-- **Authentication**: LexikJWTAuthenticationBundle
-- **File Upload**: VichUploaderBundle
-- **Testing**: PHPUnit, symfony/test-pack
-- **Async**: Messenger + queue
-- **Deployment**: Docker + PHP built-in server
-- **Documentation**: Swagger / OpenAPI via API Platform
+| Layer           | Technology                                    |
+| --------------- | --------------------------------------------- |
+| Framework       | Symfony 8                                     |
+| API Scaffolding | API Platform (REST & OpenAPI docs)            |
+| ORM             | Doctrine ORM + Migrations                     |
+| Database        | PostgreSQL (default) / SQLite for development |
+| Authentication  | LexikJWTAuthenticationBundle                  |
+| File Upload     | VichUploaderBundle                            |
+| Testing         | PHPUnit, `symfony/test-pack`                  |
+| Async Tasks     | Messenger + queue                             |
+| Deployment      | Docker + PHP built‑in server                  |
+| Documentation   | Swagger / OpenAPI via API Platform            |
 
 ---
 
@@ -130,32 +134,33 @@ Giải thích:
 
 ---
 
-## 🚀 Cách phát triển / Dev Workflow
+## 🚀 Development Workflow
 
 ```bash
-# Tạo entity
+# Create a new entity
 php bin/console make:entity
 
-# Tạo migration
+# Generate a migration
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 
-# Tạo API resource (với attribute #[ApiResource])
-# Tạo form validator, controller custom với #[ApiProperty], #[Groups], ...
+# Expose the entity as an API resource (using #[ApiResource])
+# Add custom validators, controllers, serialization groups, etc.
 
-# Tạo test
+# Run the test suite
 php bin/phpunit
 ```
 
 ---
 
-## 🔧 Ghi chú khác / Notes
+## 🔧 Notes
 
-- Symfony CLI không bắt buộc, chệ hỗ trợ local dev.
-- Dự án tuân theo PSR-4 autoload, .env config cho local/dev/test.
-- Đã thiết lập Faker Fixtures demo dữ liệu.
-- Nếu bị lỗi "DB not found": 
+* The **Symfony CLI** is optional but convenient for local development.
+* The project follows **PSR‑4** autoloading; configuration lives in `.env` files for local, development, and test environments.
+* **Faker fixtures** are included for sample data.
+* If you encounter a "Database not found" error:
+
   ```bash
   php bin/console doctrine:database:create
   php bin/console doctrine:migrations:migrate
-  
+  ```

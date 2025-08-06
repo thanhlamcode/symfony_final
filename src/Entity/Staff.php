@@ -70,50 +70,50 @@ class Staff
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private ?UuidV7 $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private string $name;
 
     #[ORM\Column(length: 180)]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private string $email;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private string $phone;
 
     #[ORM\Column(length: 255, nullable: true, enumType: Gender::class)]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private ?Gender $gender = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private ?\DateTimeInterface $birthday = null;
 
     #[ORM\Column(enumType: StaffStatus::class)]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private StaffStatus $status;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private ?string $address = null;
 
     #[ORM\ManyToOne(targetEntity: Shop::class)]
     #[ORM\JoinColumn(name: 'shop_id', referencedColumnName: 'id', nullable: true)]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private ?Shop $shop = null;
 
     #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'create')]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'update')]
-    #[Groups(['api:staff:read'])]
+    #[Groups(['api:staff'])]
     private \DateTimeInterface $updatedAt;
 
     public function __construct()
